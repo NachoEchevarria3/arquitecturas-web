@@ -1,7 +1,17 @@
 package com.jie;
 
+import com.jie.dao.ClienteDaoImpl;
+import com.jie.dao.Dao;
+import com.jie.model.Cliente;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Ejercicio Integrador 1");
+        Dao<Cliente> clienteDao = new ClienteDaoImpl();
+
+        try {
+            clienteDao.createTable();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
