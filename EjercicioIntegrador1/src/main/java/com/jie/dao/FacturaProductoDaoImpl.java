@@ -20,7 +20,7 @@ public class FacturaProductoDaoImpl implements Dao<FacturaProducto> {
                     "cantidad INT," +
                     "PRIMARY KEY (id_factura, id_producto)," +
                     "FOREIGN KEY (id_factura) REFERENCES factura(id_factura)," +
-                    "FOREIGN KEY (id_producto) REFERENCES producto(id_producto)";
+                    "FOREIGN KEY (id_producto) REFERENCES producto(id_producto))";
             stmt.execute(query);
         } catch (SQLException e) {
             throw e;
