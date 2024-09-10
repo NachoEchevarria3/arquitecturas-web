@@ -1,18 +1,21 @@
 package com.jie.dao;
 
+import com.jie.factory.Factory;
 import com.jie.model.Cliente;
-import com.jie.util.HelperMySql;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ClienteDaoImpl implements Dao<Cliente> {
+    private Factory factory;
+
+    public ClienteDaoImpl(Factory factory) {
+        this.factory = factory;
+    }
+
     @Override
     public void createTable() throws SQLException {
-        try (Connection conn = HelperMySql.getConnection();
+        try (Connection conn = factory.getConnection();
              Statement stmt = conn.createStatement()) {
             String query = "CREATE TABLE cliente (" +
                     "id_cliente INT," +
@@ -27,27 +30,72 @@ public class ClienteDaoImpl implements Dao<Cliente> {
 
 
     @Override
-    public void add(Cliente cliente) {
+    public void add(Cliente cliente) throws SQLException {
+        String query = "INSERT INTO cliente (id_cliente, nombre, email) VALUES (?, ?, ?)";
 
+        try (Connection conn = factory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, cliente.getId());
+            pstmt.setString(2, cliente.getNombre());
+            pstmt.setString(3, cliente.getEmail());
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
-    public void update(Cliente cliente, Map<String, Object> updates) {
+    public void update(Cliente cliente) throws SQLException {
+        String query = "UPDATE cliente SET nombre = ?, email = ? WHERE id_cliente = ?";
 
+        try (Connection conn = factory.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, cliente.getNombre());
+            pstmt.setString(2, cliente.getEmail());
+            pstmt.setInt(3, cliente.getId());
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
-    public void delete(Cliente cliente) {
+    public void delete(Cliente cliente) throws SQLException {
+        String query = "DELETE FROM cliente WHERE id_cliente = ?";
 
+        try (Connection conn = factory.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, cliente.getId());
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
-    public Cliente get(int id) {
-        return null;
+    public Cliente get(int id) throws SQLException {
+        Cliente cliente = null;
+        String query = "SELECT * FROM cliente WHERE id_cliente = ?";
+
+        try (Connection conn = factory.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                cliente = new Cliente(rs.getInt("id_cliente"), rs.getString("nombre"), rs.getString("email"));
+            }
+        }
+
+        return cliente;
     }
 
     @Override
-    public List<Cliente> getAll() {
-        return List.of();
+    public List<Cliente> getAll() throws SQLException {
+        List<Cliente> clientes = new ArrayList<>();
+        String query = "SELECT * FROM cliente";
+
+        try (Connection conn = factory.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                clientes.add(new Cliente(rs.getInt("id_cliente"), rs.getString("nombre"), rs.getString("email")));
+            }
+        }
+
+        return clientes;
     }
 }

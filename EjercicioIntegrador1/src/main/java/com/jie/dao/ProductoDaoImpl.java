@@ -1,18 +1,22 @@
 package com.jie.dao;
 
+import com.jie.factory.Factory;
 import com.jie.model.Producto;
 import com.jie.util.HelperMySql;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
-import java.util.Map;
 
 public class ProductoDaoImpl implements Dao<Producto> {
+    private Factory factory;
+
+    public ProductoDaoImpl(Factory factory) {
+        this.factory = factory;
+    }
+
     @Override
     public void createTable() throws SQLException {
-        try (Connection conn = HelperMySql.getConnection();
+        try (Connection conn = factory.getConnection();
              Statement stmt = conn.createStatement()) {
             String query = "CREATE TABLE producto (" +
                     "id_producto INT," +
@@ -26,12 +30,20 @@ public class ProductoDaoImpl implements Dao<Producto> {
     }
 
     @Override
-    public void add(Producto producto) {
+    public void add(Producto producto) throws SQLException {
+        String query = "INSERT INTO producto (id_producto, nombre, valor) VALUES (?, ?, ?)";
 
+        try (Connection conn = factory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, producto.getId());
+            pstmt.setString(2, producto.getNombre());
+            pstmt.setFloat(3, producto.getPrecio());
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
-    public void update(Producto producto, Map<String, Object> updates) {
+    public void update(Producto producto) {
 
     }
 
@@ -41,8 +53,20 @@ public class ProductoDaoImpl implements Dao<Producto> {
     }
 
     @Override
-    public Producto get(int id) {
-        return null;
+    public Producto get(int id) throws SQLException {
+        Producto producto = null;
+        String query = "SELECT * FROM producto WHERE id_producto = ?";
+
+        try (Connection conn = factory.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                producto = new Producto(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("valor"));
+            }
+        }
+
+        return producto;
     }
 
     @Override

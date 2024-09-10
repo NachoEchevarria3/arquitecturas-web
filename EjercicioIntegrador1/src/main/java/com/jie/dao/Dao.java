@@ -6,9 +6,9 @@ import java.util.Map;
 
 public interface Dao<T> {
     void createTable() throws SQLException;
-    void add(T t);
-    void update(T t, Map<String, Object> updates);
-    void delete(T t);
-    T get(int id);
-    List<T> getAll();
+    void add(T t) throws SQLException;
+    void update(T t) throws SQLException;
+    void delete(T t) throws SQLException;
+    T get(int id) throws SQLException;
+    List<T> getAll() throws SQLException;
 }

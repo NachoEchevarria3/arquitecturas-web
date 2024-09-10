@@ -1,18 +1,24 @@
 package com.jie.dao;
 
+import com.jie.factory.Factory;
+import com.jie.model.Cliente;
 import com.jie.model.Factura;
+import com.jie.service.ServicioClientes;
 import com.jie.util.HelperMySql;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
-import java.util.Map;
 
 public class FacturaDaoImpl implements Dao<Factura> {
+    private Factory factory;
+
+    public FacturaDaoImpl(Factory factory) {
+        this.factory = factory;
+    }
+
     @Override
     public void createTable() throws SQLException {
-        try (Connection conn = HelperMySql.getConnection();
+        try (Connection conn = factory.getConnection();
              Statement stmt = conn.createStatement()) {
             String query = "CREATE TABLE factura (" +
                     "id_factura INT," +
@@ -26,12 +32,19 @@ public class FacturaDaoImpl implements Dao<Factura> {
     }
 
     @Override
-    public void add(Factura factura) {
+    public void add(Factura factura) throws SQLException {
+        String query = "INSERT INTO factura (id_factura, id_cliente) VALUES (?,?)";
 
+        try (Connection conn = factory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, factura.getId());
+            pstmt.setInt(2, factura.getCliente().getId());
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
-    public void update(Factura factura, Map<String, Object> updates) {
+    public void update(Factura factura) {
 
     }
 
@@ -41,8 +54,22 @@ public class FacturaDaoImpl implements Dao<Factura> {
     }
 
     @Override
-    public Factura get(int id) {
-        return null;
+    public Factura get(int id) throws SQLException {
+        ServicioClientes servicioClientes = new ServicioClientes();
+        Factura factura = null;
+        String query = "SELECT * FROM factura WHERE id_factura = ?";
+
+        try (Connection conn = factory.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Cliente cliente = servicioClientes.findById(rs.getInt("id_cliente"));
+                factura = new Factura(rs.getInt("id_factura"), cliente);
+            }
+        }
+
+        return factura;
     }
 
     @Override
