@@ -1,7 +1,6 @@
 package com.jie.factory;
 
-import com.jie.dao.ClienteDaoImpl;
-import com.jie.dao.Dao;
+import com.jie.dao.*;
 import com.jie.model.Cliente;
 import com.jie.model.Factura;
 import com.jie.model.FacturaProducto;
@@ -24,16 +23,16 @@ public class DerbyFactory implements Factory {
 
     @Override
     public Dao<Factura> getFacturaDao() {
-        return null;
+        return new FacturaDaoImpl(this);
     }
 
     @Override
     public Dao<Producto> getProductoDao() {
-        return null;
+        return new ProductoDaoImpl(this);
     }
 
     @Override
     public Dao<FacturaProducto> getFacturaProductoDao() {
-        return null;
+        return new FacturaProductoDaoImpl(this);
     }
 }
