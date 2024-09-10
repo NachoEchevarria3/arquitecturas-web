@@ -5,6 +5,7 @@ import com.jie.model.Producto;
 import com.jie.util.HelperMySql;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoDaoImpl implements Dao<Producto> {
@@ -43,13 +44,27 @@ public class ProductoDaoImpl implements Dao<Producto> {
     }
 
     @Override
-    public void update(Producto producto) {
+    public void update(Producto producto) throws SQLException {
+        String query = "UPDATE producto SET id_producto = ?, nombre = ? WHERE valor = ?";
 
+        try (Connection conn = factory.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, producto.getId());
+            pstmt.setString(2, producto.getNombre());
+            pstmt.setFloat(3, producto.getPrecio());
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
-    public void delete(Producto producto) {
+    public void delete(Producto producto) throws SQLException {
+        String query = "DELETE FROM producto WHERE id_producto = ?";
 
+        try (Connection conn = factory.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setInt(1, producto.getId());
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
@@ -70,7 +85,16 @@ public class ProductoDaoImpl implements Dao<Producto> {
     }
 
     @Override
-    public List<Producto> getAll() {
-        return List.of();
+    public List<Producto> getAll() throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        String query = "SELECT * FROM producto";
+
+        try (Connection conn = factory.getConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)) {
+             ResultSet rs = pstmt.executeQuery();
+             while (rs.next()) {
+                 productos.add(new Producto(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("valor")));
+             }
+        }
     }
 }
