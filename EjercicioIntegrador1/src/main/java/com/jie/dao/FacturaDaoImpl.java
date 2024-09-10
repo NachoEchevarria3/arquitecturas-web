@@ -44,13 +44,26 @@ public class FacturaDaoImpl implements Dao<Factura> {
     }
 
     @Override
-    public void update(Factura factura) {
+    public void update(Factura factura) throws SQLException {
+        String query = "UPDATE factura SET idCliente = ? WHERE id_factura = ?";
 
+        try (Connection conn = factory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, factura.getIdCliente());
+            pstmt.setInt(2, factura.getId);
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
     public void delete(Factura factura) {
+        String query = "DELETE FROM factura WHERE id_factura = ?";
 
+        try (Connection conn = factory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, factura.getId());
+            pstmt.executeUpdate();
+        }
     }
 
     @Override
@@ -60,7 +73,7 @@ public class FacturaDaoImpl implements Dao<Factura> {
         String query = "SELECT * FROM factura WHERE id_factura = ?";
 
         try (Connection conn = factory.getConnection();
-        PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -74,6 +87,17 @@ public class FacturaDaoImpl implements Dao<Factura> {
 
     @Override
     public List<Factura> getAll() {
-        return List.of();
+        List<Factura> facturas = new ArrayList<>();
+        String query = "SELECT * FROM facturas";
+
+        try (Connection conn = factory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                facturas.add(new Factura(rs.getInt("id_factura"), rs.getInt("id_cliente"));
+            }
+        }
+        return facturas;
     }
 }
+
