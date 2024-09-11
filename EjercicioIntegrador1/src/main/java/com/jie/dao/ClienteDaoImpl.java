@@ -108,7 +108,7 @@ public class ClienteDaoImpl implements ClienteDao {
                 "INNER JOIN factura_producto fp ON f.id_factura = fp.id_factura " +
                 "INNER JOIN producto p ON fp.id_producto = p.id_producto " +
                 "GROUP BY c.id_cliente " +
-                "ORDER BY ValorFactura DESC;";
+                "ORDER BY facturacion DESC;";
 
         try (Connection conn = factory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {

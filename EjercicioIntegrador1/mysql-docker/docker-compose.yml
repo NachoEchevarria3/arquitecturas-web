@@ -5,7 +5,7 @@ services:
     image: mysql
     container_name: MYSQL-DOCKER
     ports:
-      - 3307:3306
+      - 3306:3306
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: "integrador1"
