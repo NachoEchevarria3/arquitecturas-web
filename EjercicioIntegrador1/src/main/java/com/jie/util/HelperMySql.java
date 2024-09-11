@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class HelperMySql {
-    private static final String URL = "jdbc:mysql://localhost:3307/tp1_db";
+    private static final String URL = "jdbc:mysql://localhost:3307/integrador1";
     private static final String USER = "root";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "";
 
     public static Connection getConnection() throws SQLException {
         try {

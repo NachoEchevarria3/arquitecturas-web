@@ -2,7 +2,6 @@ package com.jie.dao;
 
 import com.jie.factory.Factory;
 import com.jie.model.Producto;
-import com.jie.util.HelperMySql;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -96,5 +95,7 @@ public class ProductoDaoImpl implements Dao<Producto> {
                  productos.add(new Producto(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("valor")));
              }
         }
+
+        return productos;
     }
 }

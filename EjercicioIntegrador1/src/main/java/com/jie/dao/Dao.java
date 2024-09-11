@@ -2,7 +2,6 @@ package com.jie.dao;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 public interface Dao<T> {
     void createTable() throws SQLException;

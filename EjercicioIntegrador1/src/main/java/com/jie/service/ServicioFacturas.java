@@ -1,7 +1,7 @@
 package com.jie.service;
 
 import com.jie.dao.Dao;
-import com.jie.dao.FacturaDaoImpl;
+import com.jie.factory.Factory;
 import com.jie.model.Factura;
 
 import java.sql.SQLException;
@@ -9,8 +9,8 @@ import java.sql.SQLException;
 public class ServicioFacturas {
     private Dao<Factura> daoFactura;
 
-    public ServicioFacturas() {
-        this.daoFactura = new FacturaDaoImpl();
+    public ServicioFacturas(Factory factory) {
+        this.daoFactura = factory.getFacturaDao();
     }
 
     public void add(Factura factura) {

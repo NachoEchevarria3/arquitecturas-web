@@ -4,9 +4,9 @@ import com.jie.factory.Factory;
 import com.jie.model.Cliente;
 import com.jie.model.Factura;
 import com.jie.service.ServicioClientes;
-import com.jie.util.HelperMySql;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FacturaDaoImpl implements Dao<Factura> {
@@ -45,18 +45,18 @@ public class FacturaDaoImpl implements Dao<Factura> {
 
     @Override
     public void update(Factura factura) throws SQLException {
-        String query = "UPDATE factura SET idCliente = ? WHERE id_factura = ?";
+        String query = "UPDATE factura SET id_cliente WHERE id_factura = ?";
 
         try (Connection conn = factory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setString(1, factura.getIdCliente());
-            pstmt.setInt(2, factura.getId);
+            pstmt.setInt(1, factura.getCliente().getId());
+            pstmt.setInt(2, factura.getId());
             pstmt.executeUpdate();
         }
     }
 
     @Override
-    public void delete(Factura factura) {
+    public void delete(Factura factura) throws SQLException {
         String query = "DELETE FROM factura WHERE id_factura = ?";
 
         try (Connection conn = factory.getConnection();
@@ -68,7 +68,7 @@ public class FacturaDaoImpl implements Dao<Factura> {
 
     @Override
     public Factura get(int id) throws SQLException {
-        ServicioClientes servicioClientes = new ServicioClientes();
+        ServicioClientes servicioClientes = new ServicioClientes(factory);
         Factura factura = null;
         String query = "SELECT * FROM factura WHERE id_factura = ?";
 
@@ -86,7 +86,8 @@ public class FacturaDaoImpl implements Dao<Factura> {
     }
 
     @Override
-    public List<Factura> getAll() {
+    public List<Factura> getAll() throws SQLException {
+        ServicioClientes servicioClientes = new ServicioClientes(factory);
         List<Factura> facturas = new ArrayList<>();
         String query = "SELECT * FROM facturas";
 
@@ -94,9 +95,11 @@ public class FacturaDaoImpl implements Dao<Factura> {
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                facturas.add(new Factura(rs.getInt("id_factura"), rs.getInt("id_cliente"));
+                Cliente cliente = servicioClientes.findById(rs.getInt("id_cliente"));
+                facturas.add(new Factura(rs.getInt("id_factura"), cliente));
             }
         }
+
         return facturas;
     }
 }

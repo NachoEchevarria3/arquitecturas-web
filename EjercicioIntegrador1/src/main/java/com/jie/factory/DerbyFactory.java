@@ -10,7 +10,18 @@ import com.jie.util.HelperDerby;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class DerbyFactory implements Factory {
+public class DerbyFactory extends Factory {
+    private static DerbyFactory instance;
+
+    private DerbyFactory() {}
+
+    public static DerbyFactory getInstance() {
+        if (instance == null) {
+            instance = new DerbyFactory();
+        }
+        return instance;
+    }
+
     @Override
     public Connection getConnection() throws SQLException {
         return HelperDerby.getConnection();

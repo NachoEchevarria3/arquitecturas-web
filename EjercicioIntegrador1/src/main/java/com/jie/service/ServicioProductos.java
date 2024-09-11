@@ -1,17 +1,17 @@
 package com.jie.service;
 
 import com.jie.dao.Dao;
-import com.jie.dao.ProductoDaoImpl;
-import com.jie.model.Cliente;
+import com.jie.factory.Factory;
 import com.jie.model.Producto;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class ServicioProductos {
     private Dao<Producto> daoProductos;
 
-    public ServicioProductos() {
-        this.daoProductos = new ProductoDaoImpl();
+    public ServicioProductos(Factory factory) {
+        this.daoProductos = factory.getProductoDao();
     }
 
     public void add(Producto producto) {

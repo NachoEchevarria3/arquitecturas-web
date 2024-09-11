@@ -1,5 +1,6 @@
 package com.jie.util;
 
+import com.jie.factory.Factory;
 import com.jie.model.Cliente;
 import com.jie.model.Factura;
 import com.jie.model.FacturaProducto;
@@ -16,7 +17,13 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class HelperCSV {
-    public static void readCsv(String url) {
+    private final Factory factory;
+
+    public HelperCSV(Factory factory) {
+        this.factory = factory;
+    }
+
+    public void readCsv(String url) {
         String urlBase = "src/main/resources/";
         try {
             CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(new FileReader(urlBase + url));
@@ -35,8 +42,8 @@ public class HelperCSV {
         }
     }
 
-    private static void cargarProductos(CSVParser parser) {
-        ServicioProductos servicioProductos = new ServicioProductos();
+    private void cargarProductos(CSVParser parser) {
+        ServicioProductos servicioProductos = new ServicioProductos(factory);
         for (CSVRecord csvRecord : parser) {
             String id = csvRecord.get("idProducto");
             String nombre = csvRecord.get("nombre");
@@ -45,10 +52,10 @@ public class HelperCSV {
         }
     }
 
-    private static void cargarFacturasProductos(CSVParser parser) {
-        ServicioFacturasProductos servicioFacturasProductos = new ServicioFacturasProductos();
-        ServicioFacturas servicioFacturas = new ServicioFacturas();
-        ServicioProductos servicioProductos = new ServicioProductos();
+    private void cargarFacturasProductos(CSVParser parser) {
+        ServicioFacturasProductos servicioFacturasProductos = new ServicioFacturasProductos(factory);
+        ServicioFacturas servicioFacturas = new ServicioFacturas(factory);
+        ServicioProductos servicioProductos = new ServicioProductos(factory);
 
         for (CSVRecord csvRecord : parser) {
             String idFactura = csvRecord.get("idFactura");
@@ -60,9 +67,9 @@ public class HelperCSV {
         }
     }
 
-    private static void cargarFacturas(CSVParser parser) {
-        ServicioFacturas servicioFacturas = new ServicioFacturas();
-        ServicioClientes servicioClientes = new ServicioClientes();
+    private void cargarFacturas(CSVParser parser) {
+        ServicioFacturas servicioFacturas = new ServicioFacturas(factory);
+        ServicioClientes servicioClientes = new ServicioClientes(factory);
 
         for (CSVRecord csvRecord : parser) {
             String idFactura = csvRecord.get("idFactura");
@@ -72,8 +79,8 @@ public class HelperCSV {
         }
     }
 
-    private static void cargarClientes(CSVParser parser) {
-        ServicioClientes servicioClientes = new ServicioClientes();
+    private void cargarClientes(CSVParser parser) {
+        ServicioClientes servicioClientes = new ServicioClientes(factory);
         for (CSVRecord csvRecord : parser) {
             String id = csvRecord.get("idCliente");
             String nombre = csvRecord.get("nombre");

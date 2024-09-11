@@ -1,16 +1,17 @@
 package com.jie.service;
 
-import com.jie.dao.Dao;
-import com.jie.dao.FacturaProductoDaoImpl;
+import com.jie.dao.FacturaProductoDao;
+import com.jie.factory.Factory;
 import com.jie.model.FacturaProducto;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class ServicioFacturasProductos {
-    private Dao<FacturaProducto> daoFacturaProducto;
+    private FacturaProductoDao daoFacturaProducto;
 
-    public ServicioFacturasProductos() {
-        this.daoFacturaProducto = new FacturaProductoDaoImpl();
+    public ServicioFacturasProductos(Factory factory) {
+        this.daoFacturaProducto = (FacturaProductoDao) factory.getFacturaProductoDao();
     }
 
     public void add(FacturaProducto facturaProducto) {
@@ -23,15 +24,15 @@ public class ServicioFacturasProductos {
     }
 
 
-    public FacturasProductos findById(int idFactura, int idProducto) {
+    public FacturaProducto findById(int idFactura, int idProducto) {
         try {
-            return this.daoFacturaProducto.get(int idFactura, int idProducto);
+            return this.daoFacturaProducto.get(idFactura, idProducto);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<FacturasProductos> findAll() {
+    public List<FacturaProducto> findAll() {
         try {
             return this.daoFacturaProducto.getAll();
         } catch (SQLException e) {
@@ -39,7 +40,7 @@ public class ServicioFacturasProductos {
         }
     }
 
-    public void delete(FacturasProductos facturaProducto) {
+    public void delete(FacturaProducto facturaProducto) {
         if (facturaProducto == null) throw new IllegalArgumentException("La factura no puede ser nulo");
         try {
             this.daoFacturaProducto.delete(facturaProducto);
@@ -48,7 +49,7 @@ public class ServicioFacturasProductos {
         }
     }
 
-    public void update(FacturasProductos facturaProducto) {
+    public void update(FacturaProducto facturaProducto) {
         if (facturaProducto == null) throw new IllegalArgumentException("La factura no puede ser nula");
         try {
             this.daoFacturaProducto.update(facturaProducto);

@@ -10,7 +10,18 @@ import com.jie.util.HelperMySql;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class MySqlFactory implements Factory {
+public class MySqlFactory extends Factory {
+    private static MySqlFactory instance;
+
+    private MySqlFactory() {}
+
+    public static MySqlFactory getInstance() {
+        if (instance == null) {
+            instance = new MySqlFactory();
+        }
+        return instance;
+    }
+
     @Override
     public Connection getConnection() throws SQLException {
         return HelperMySql.getConnection();

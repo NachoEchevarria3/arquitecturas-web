@@ -2,6 +2,7 @@ package com.jie.service;
 
 import com.jie.dao.ClienteDaoImpl;
 import com.jie.dao.Dao;
+import com.jie.factory.Factory;
 import com.jie.model.Cliente;
 
 import java.sql.SQLException;
@@ -10,8 +11,8 @@ import java.util.List;
 public class ServicioClientes {
     private Dao<Cliente> daoClientes;
 
-    public ServicioClientes() {
-        this.daoClientes = new ClienteDaoImpl();
+    public ServicioClientes(Factory factory) {
+        this.daoClientes = factory.getClienteDao();
     }
 
     public void add(Cliente cliente) {

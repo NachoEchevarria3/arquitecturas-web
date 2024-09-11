@@ -2,17 +2,14 @@ package com.jie.dao;
 
 import com.jie.factory.Factory;
 import com.jie.model.FacturaProducto;
-import com.jie.util.HelperMySql;
 import com.jie.service.ServicioFacturas;
 import com.jie.service.ServicioProductos;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
-public class FacturaProductoDaoImpl implements Dao<FacturaProducto> {
+public class FacturaProductoDaoImpl implements FacturaProductoDao {
     private Factory factory;
 
     public FacturaProductoDaoImpl(Factory factory) {
@@ -74,11 +71,16 @@ public class FacturaProductoDaoImpl implements Dao<FacturaProducto> {
     }
 
     @Override
+    public FacturaProducto get(int id) throws SQLException {
+        return null;
+    }
+
+    @Override
     public FacturaProducto get(int idFactura, int idProducto) throws SQLException {
         FacturaProducto facturaProducto = null;
         String query = "SELECT * FROM factura_producto WHERE id_factura = ? AND id_producto = ?";
-        ServicioFacturas servicioFacturas = new ServicioFacturas();
-        ServicioProductos servicioProducto = new ServicioProductos();
+        ServicioFacturas servicioFacturas = new ServicioFacturas(factory);
+        ServicioProductos servicioProductos = new ServicioProductos(factory);
 
         try (Connection conn = factory.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -86,7 +88,7 @@ public class FacturaProductoDaoImpl implements Dao<FacturaProducto> {
             pstmt.setInt(2, idProducto);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                facturaProducto = new FacturaProducto(servicioFacturas.get(rs.getInt("id_factura")), servicioProductos(rs.getInt("id_producto")), rs.getInt("cantidad"));
+                facturaProducto = new FacturaProducto(servicioFacturas.findById(rs.getInt("id_factura")), servicioProductos.findById(rs.getInt("id_producto")), rs.getInt("cantidad"));
             }
         }
 
@@ -95,6 +97,8 @@ public class FacturaProductoDaoImpl implements Dao<FacturaProducto> {
 
     @Override
     public List<FacturaProducto> getAll() throws SQLException {
+        ServicioFacturas servicioFacturas = new ServicioFacturas(factory);
+        ServicioProductos servicioProductos = new ServicioProductos(factory);
         List<FacturaProducto> facturaProducto = new ArrayList<>();
 
         String query = "SELECT * FROM factura_producto";
@@ -102,7 +106,7 @@ public class FacturaProductoDaoImpl implements Dao<FacturaProducto> {
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                facturaProducto.add(new FacturaProducto(servicioFacturas.get(rs.getInt("id_factura")), servicioProductos(rs.getInt("id_producto")), rs.getInt("cantidad")));
+                facturaProducto.add(new FacturaProducto(servicioFacturas.findById(rs.getInt("id_factura")), servicioProductos.findById(rs.getInt("id_producto")), rs.getInt("cantidad")));
             }
         }
 

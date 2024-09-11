@@ -7,7 +7,7 @@ services:
     ports:
       - 3307:3306
     environment:
-      MYSQL_ROOT_PASSWORD: "password"
-      MYSQL_DATABASE: "tp1_db"
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: "integrador1"
     volumes:
       - ./schemas:/var/lib/mysql

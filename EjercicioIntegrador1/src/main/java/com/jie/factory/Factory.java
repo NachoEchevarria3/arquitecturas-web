@@ -9,10 +9,26 @@ import com.jie.model.Producto;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public interface Factory {
-    Connection getConnection() throws SQLException;
-    Dao<Cliente> getClienteDao();
-    Dao<Factura> getFacturaDao();
-    Dao<Producto> getProductoDao();
-    Dao<FacturaProducto> getFacturaProductoDao();
+public abstract class Factory {
+    public enum dbTypes {
+        MYSQL,
+        DERBY
+    }
+
+    public abstract Connection getConnection() throws SQLException;
+    public abstract Dao<Cliente> getClienteDao();
+    public abstract Dao<Factura> getFacturaDao();
+    public abstract Dao<Producto> getProductoDao();
+    public abstract Dao<FacturaProducto> getFacturaProductoDao();
+
+    public static Factory getFactory(dbTypes dbType) {
+        switch (dbType) {
+            case MYSQL:
+                return MySqlFactory.getInstance();
+            case DERBY:
+                return DerbyFactory.getInstance();
+            default:
+                return null;
+        }
+    }
 }
