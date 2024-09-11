@@ -1,5 +1,6 @@
 package com.jie.dao;
 
+import com.jie.dto.ProductoDto;
 import com.jie.factory.Factory;
 import com.jie.model.Producto;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductoDaoImpl implements Dao<Producto> {
+public class ProductoDaoImpl implements ProductoDao {
     private Factory factory;
 
     public ProductoDaoImpl(Factory factory) {
@@ -97,5 +98,25 @@ public class ProductoDaoImpl implements Dao<Producto> {
         }
 
         return productos;
+    }
+
+    @Override
+    public ProductoDto obtenerProductoQueMasRecaudo() throws SQLException {
+        ProductoDto producto = null;
+        String query = "SELECT p.id_producto, p.nombre, p.valor, SUM(fp.cantidad * p.valor) recaudacion " +
+                "FROM factura_producto fp INNER JOIN producto p ON fp.id_producto = p.id_producto " +
+                "GROUP BY p.id_producto " +
+                "ORDER BY recaudacion DESC " +
+                "LIMIT 1";
+
+        try (Connection conn = factory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                producto = new ProductoDto(rs.getInt("id_producto"), rs.getString("nombre"), rs.getFloat("valor"), rs.getFloat("recaudacion"));
+            }
+        }
+
+        return producto;
     }
 }

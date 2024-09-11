@@ -1,7 +1,7 @@
 package com.jie.service;
 
-import com.jie.dao.ClienteDaoImpl;
-import com.jie.dao.Dao;
+import com.jie.dao.ClienteDao;
+import com.jie.dto.ClienteDto;
 import com.jie.factory.Factory;
 import com.jie.model.Cliente;
 
@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class ServicioClientes {
-    private Dao<Cliente> daoClientes;
+    private ClienteDao daoClientes;
 
     public ServicioClientes(Factory factory) {
-        this.daoClientes = factory.getClienteDao();
+        this.daoClientes = (ClienteDao) factory.getClienteDao();
     }
 
     public void add(Cliente cliente) {
@@ -53,6 +53,14 @@ public class ServicioClientes {
         if (cliente == null) throw new IllegalArgumentException("El cliente no puede ser nulo");
         try {
             this.daoClientes.update(cliente);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<ClienteDto> facturacionTotalClientes() {
+        try {
+            return this.daoClientes.facturacionTotalClientes();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

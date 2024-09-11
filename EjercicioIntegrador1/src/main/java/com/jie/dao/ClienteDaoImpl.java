@@ -1,12 +1,13 @@
 package com.jie.dao;
 
+import com.jie.dto.ClienteDto;
 import com.jie.factory.Factory;
 import com.jie.model.Cliente;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClienteDaoImpl implements Dao<Cliente> {
+public class ClienteDaoImpl implements ClienteDao {
     private Factory factory;
 
     public ClienteDaoImpl(Factory factory) {
@@ -93,6 +94,28 @@ public class ClienteDaoImpl implements Dao<Cliente> {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 clientes.add(new Cliente(rs.getInt("id_cliente"), rs.getString("nombre"), rs.getString("email")));
+            }
+        }
+
+        return clientes;
+    }
+
+    @Override
+    public List<ClienteDto> facturacionTotalClientes() throws SQLException {
+        List<ClienteDto> clientes = new ArrayList<>();
+        String query = "SELECT c.id_cliente, c.nombre, SUM(fp.cantidad * p.valor) facturacion FROM cliente c " +
+                "INNER JOIN factura f ON c.id_cliente = f.id_cliente " +
+                "INNER JOIN factura_producto fp ON f.id_factura = fp.id_factura " +
+                "INNER JOIN producto p ON fp.id_producto = p.id_producto " +
+                "GROUP BY c.id_cliente " +
+                "ORDER BY ValorFactura DESC;";
+
+        try (Connection conn = factory.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                ClienteDto clienteDto = new ClienteDto(rs.getInt("id_cliente"), rs.getString("nombre"), rs.getFloat("facturacion"));
+                clientes.add(clienteDto);
             }
         }
 
