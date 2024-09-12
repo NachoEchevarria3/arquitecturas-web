@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class HelperDerby {
     private static final String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-    private static final String URL = "jdbc:mysql://localhost:3307/integrador1";
+    private static final String URL = "jdbc:derby:integrador1;create=true";
 
     public static Connection getConnection() throws SQLException {
         try {

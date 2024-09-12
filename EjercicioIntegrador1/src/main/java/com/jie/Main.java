@@ -14,13 +14,11 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Trabajo Práctico 1 - Arquitecturas Web");
-        // HelperCSV helperCSV = new HelperCSV(Factory.getFactory(Factory.dbTypes.MYSQL));
         cargarDB();
         ServicioClientes servicioClientes = new ServicioClientes(Factory.getFactory(Factory.dbTypes.MYSQL));
         servicioClientes.facturacionTotalClientes().forEach(System.out::println);
         ServicioProductos servicioProductos = new ServicioProductos(Factory.getFactory(Factory.dbTypes.MYSQL));
         System.out.println(servicioProductos.obtenerProductoQueMasRecaudo());
-
     }
 
     private static void cargarDB(){
