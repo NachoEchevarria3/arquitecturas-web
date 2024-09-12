@@ -14,6 +14,14 @@ public class ServicioFacturasProductos {
         this.daoFacturaProducto = (FacturaProductoDao) factory.getFacturaProductoDao();
     }
 
+    public void createTable() {
+        try {
+            this.daoFacturaProducto.createTable();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void add(FacturaProducto facturaProducto) {
         if (facturaProducto == null) throw new IllegalArgumentException("FacturaProducto no puede ser nulo");
         try {

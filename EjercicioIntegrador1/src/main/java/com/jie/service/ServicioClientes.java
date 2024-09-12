@@ -15,6 +15,14 @@ public class ServicioClientes {
         this.daoClientes = (ClienteDao) factory.getClienteDao();
     }
 
+    public void createTable() {
+        try {
+            this.daoClientes.createTable();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void add(Cliente cliente) {
         if (cliente == null) throw new IllegalArgumentException("El cliente no puede ser nulo");
         try {

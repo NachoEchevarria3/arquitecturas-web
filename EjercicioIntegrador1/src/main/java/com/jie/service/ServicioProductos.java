@@ -15,6 +15,14 @@ public class ServicioProductos {
         this.daoProductos = (ProductoDao) factory.getProductoDao();
     }
 
+    public void createTable() {
+        try {
+            this.daoProductos.createTable();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void add(Producto producto) {
         if (producto == null) throw new IllegalArgumentException("El producto no puede ser nulo");
         try {
