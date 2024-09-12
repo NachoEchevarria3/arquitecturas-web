@@ -10,11 +10,18 @@ import com.jie.util.HelperCSV;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Trabajo Práctico 1 - Arquitecturas Web");
-        cargarDB();
-        ServicioClientes servicioClientes = new ServicioClientes(Factory.getFactory(Factory.dbTypes.MYSQL));
-        servicioClientes.facturacionTotalClientes().forEach(System.out::println);
+        //cargarDB();
+
+        //Ejercicio 3
+        System.out.println("\nProducto que más se vendió:");
         ServicioProductos servicioProductos = new ServicioProductos(Factory.getFactory(Factory.dbTypes.MYSQL));
         System.out.println(servicioProductos.obtenerProductoQueMasRecaudo());
+
+        //Ejercicio 4
+        System.out.println("\nLista de clientes ordenada según factuación");
+        ServicioClientes servicioClientes = new ServicioClientes(Factory.getFactory(Factory.dbTypes.MYSQL));
+        servicioClientes.facturacionTotalClientes().forEach(System.out::println);
+
     }
 
     private static void cargarDB(){
