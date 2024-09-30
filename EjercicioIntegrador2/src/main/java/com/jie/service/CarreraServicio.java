@@ -1,19 +1,20 @@
 package com.jie.service;
 
 import com.jie.dto.CarreraDto;
+import com.jie.factory.RepositoryFactory;
 import com.jie.model.Carrera;
+import com.jie.model.Estudiante;
 import com.jie.repository.CarreraRepository;
 import com.jie.repository.CarreraRepositoryImpl;
-import com.jie.repository.Repository;
-import com.jie.util.HibernateUtil;
+import com.jie.util.MySqlHibernateUtil;
 
 import java.util.List;
 
 public class CarreraServicio {
     private final CarreraRepository carreraRepository;
 
-    public CarreraServicio() {
-        this.carreraRepository = new CarreraRepositoryImpl(HibernateUtil.getEntityManager());
+    public CarreraServicio(RepositoryFactory repositoryFactory) {
+        this.carreraRepository = (CarreraRepository) repositoryFactory.getCarreraRepository();
     }
 
     public void save(Carrera carrera) {
@@ -37,5 +38,11 @@ public class CarreraServicio {
 
     public List<CarreraDto> findAllOrderedByCantidadInscriptos() {
         return this.carreraRepository.findAllOrderedByCantidadInscriptos();
+    }
+
+    public List<Estudiante> findAllEstudiantesByCarreraAndCiudad(Carrera carrera, String ciudad) {
+        if (carrera == null) throw new IllegalArgumentException("Carrera no puede ser nulo");
+        if (ciudad == null) throw new IllegalArgumentException("Ciudad no puede ser nulo");
+        return this.carreraRepository.findAllEstudiantesByCarreraAndCiudad(carrera, ciudad);
     }
 }

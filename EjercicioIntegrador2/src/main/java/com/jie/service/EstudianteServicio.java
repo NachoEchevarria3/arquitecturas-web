@@ -1,17 +1,18 @@
 package com.jie.service;
 
+import com.jie.factory.RepositoryFactory;
 import com.jie.model.Estudiante;
 import com.jie.repository.EstudianteRepository;
 import com.jie.repository.EstudianteRepositoryImpl;
-import com.jie.util.HibernateUtil;
+import com.jie.util.MySqlHibernateUtil;
 
 import java.util.List;
 
 public class EstudianteServicio {
     private final EstudianteRepository estudianteRepository;
 
-    public EstudianteServicio() {
-        this.estudianteRepository = new EstudianteRepositoryImpl(HibernateUtil.getEntityManager());
+    public EstudianteServicio(RepositoryFactory repositoryFactory) {
+        this.estudianteRepository = (EstudianteRepository) repositoryFactory.getEstudianteRepository();
     }
 
     public void save(Estudiante estudiante) {

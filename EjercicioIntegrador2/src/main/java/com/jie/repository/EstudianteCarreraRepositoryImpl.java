@@ -1,22 +1,28 @@
 package com.jie.repository;
 
+import com.jie.factory.RepositoryFactory;
 import com.jie.model.EstudianteCarrera;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 public class EstudianteCarreraRepositoryImpl implements Repository<EstudianteCarrera> {
-    private EntityManager em;
+    private RepositoryFactory repositoryFactory;
 
-    public EstudianteCarreraRepositoryImpl(EntityManager em) {
-        this.em = em;
+    public EstudianteCarreraRepositoryImpl(RepositoryFactory repositoryFactory) {
+        this.repositoryFactory = repositoryFactory;
     }
 
     @Override
     public void save(EstudianteCarrera estudianteCarrera) {
-        em.getTransaction().begin();
-        em.merge(estudianteCarrera);
-        em.getTransaction().commit();
+        EntityManager em = repositoryFactory.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(estudianteCarrera);
+            em.getTransaction().commit();
+        } finally {
+            repositoryFactory.closeEntityManager(em);
+        }
     }
 
     @Override
