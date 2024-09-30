@@ -6,16 +6,12 @@ import java.util.List;
 @Entity
 public class Estudiante {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int dni;
 
     private String nombre;
     private String apellido;
     private int edad;
     private String genero;
-
-    @Column(unique = true)
-    private int dni;
     private String ciudadResidencia;
 
     @Column(unique = true)
@@ -26,18 +22,18 @@ public class Estudiante {
 
     public Estudiante() {}
 
-    public Estudiante(String nombre, String apellido, int edad, String genero, int dni, String ciudadResidencia, int numeroLibreta) {
+    public Estudiante(int dni, String nombre, String apellido, int edad, String genero, String ciudadResidencia, int numeroLibreta) {
+        this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
         this.edad = edad;
         this.genero = genero;
-        this.dni = dni;
         this.ciudadResidencia = ciudadResidencia;
         this.numeroLibreta = numeroLibreta;
     }
 
-    public int getId() {
-        return id;
+    public int getDni() {
+        return dni;
     }
 
     public String getNombre() {
@@ -72,14 +68,6 @@ public class Estudiante {
         this.genero = genero;
     }
 
-    public int getDni() {
-        return dni;
-    }
-
-    public void setDni(int dni) {
-        this.dni = dni;
-    }
-
     public String getCiudadResidencia() {
         return ciudadResidencia;
     }
@@ -99,12 +87,11 @@ public class Estudiante {
     @Override
     public String toString() {
         return "Estudiante{" +
-                "id=" + id +
+                "dni=" + dni +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
-                ", ciudadResidencia='" + ciudadResidencia + '\'' +
                 ", genero='" + genero + '\'' +
-                ", dni=" + dni +
+                ", ciudadResidencia='" + ciudadResidencia + '\'' +
                 '}';
     }
 }

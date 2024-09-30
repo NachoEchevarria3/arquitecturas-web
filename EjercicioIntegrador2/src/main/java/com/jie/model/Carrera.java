@@ -6,18 +6,21 @@ import java.util.List;
 @Entity
 public class Carrera {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String nombre;
+
+    private int duracion;
 
     @OneToMany(mappedBy = "carrera")
     private List<EstudianteCarrera> estudiantes;
 
     public Carrera() {}
 
-    public Carrera(String nombre) {
+    public Carrera(int id, String nombre, int duracion) {
+        this.id = id;
         this.nombre = nombre;
+        this.duracion = duracion;
     }
 
     public int getId() {
@@ -32,10 +35,21 @@ public class Carrera {
         this.nombre = nombre;
     }
 
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
     @Override
     public String toString() {
         return "Carrera{" +
-                "nombre='" + nombre + '\'' +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", duracion=" + duracion +
+                ", estudiantes=" + estudiantes +
                 '}';
     }
 }

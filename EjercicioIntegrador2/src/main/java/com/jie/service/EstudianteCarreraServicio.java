@@ -4,11 +4,7 @@ import com.jie.factory.RepositoryFactory;
 import com.jie.model.Carrera;
 import com.jie.model.Estudiante;
 import com.jie.model.EstudianteCarrera;
-import com.jie.repository.EstudianteCarreraRepositoryImpl;
 import com.jie.repository.Repository;
-import com.jie.util.MySqlHibernateUtil;
-
-import java.time.LocalDate;
 
 public class EstudianteCarreraServicio {
     private Repository<EstudianteCarrera> estudianteCarreraRepository;
@@ -17,14 +13,14 @@ public class EstudianteCarreraServicio {
         this.estudianteCarreraRepository = repositoryFactory.getEstudianteCarreraRepository();
     }
 
-    public void matricularEstudiante(Estudiante estudiante, Carrera carrera, LocalDate fecha) {
-        if (estudiante == null) throw new IllegalArgumentException("Estudiante no puede ser nulo");
-        if (carrera == null) throw new IllegalArgumentException("Carrera no puede ser nulo");
-        this.estudianteCarreraRepository.save(new EstudianteCarrera(estudiante, carrera, fecha));
+    public void save(EstudianteCarrera estudianteCarrera) {
+        if (estudianteCarrera == null) throw new IllegalArgumentException("EstudianteCarrera no puede ser nulo");
+        this.estudianteCarreraRepository.save(estudianteCarrera);
     }
 
-    public void graduarEstudiante(Estudiante estudiante, Carrera carrera, LocalDate fecha) {
+    public void matricularEstudiante(Estudiante estudiante, Carrera carrera, int anio) {
         if (estudiante == null) throw new IllegalArgumentException("Estudiante no puede ser nulo");
         if (carrera == null) throw new IllegalArgumentException("Carrera no puede ser nulo");
+        this.estudianteCarreraRepository.save(new EstudianteCarrera(estudiante, carrera, anio));
     }
 }

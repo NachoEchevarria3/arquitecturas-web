@@ -1,11 +1,13 @@
 package com.jie.repository;
 
 import com.jie.dto.CarreraDto;
+import com.jie.dto.ReporteCarreraDto;
 import com.jie.factory.RepositoryFactory;
 import com.jie.model.Carrera;
 import com.jie.model.Estudiante;
 
 import javax.persistence.EntityManager;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +90,41 @@ public class CarreraRepositoryImpl implements CarreraRepository {
                     .setParameter("carrera", carrera)
                     .setParameter("ciudad", ciudad)
                     .getResultList();
+        } finally {
+            repositoryFactory.closeEntityManager(em);
+        }
+    }
+
+    @Override
+    public List<ReporteCarreraDto> generarReporteCarreras() {
+        EntityManager em = repositoryFactory.getEntityManager();
+        List<ReporteCarreraDto> reporte = new ArrayList<>();
+        try {
+            List<Object[]> resultado = em.createNativeQuery(
+                    "SELECT DISTINCT c.nombre, anios.year, " +
+                            "COUNT(CASE WHEN ec.anioInscripcion = anios.year THEN 1 END) OVER (PARTITION BY c.nombre, anios.year) AS inscriptos, " +
+                            "COUNT(CASE WHEN ec.anioGraduacion = anios.year THEN 1 END) OVER (PARTITION BY c.nombre, anios.year) AS egresados " +
+                            "FROM (SELECT anioInscripcion AS year FROM EstudianteCarrera " +
+                            "      UNION " +
+                            "      SELECT anioGraduacion FROM EstudianteCarrera " +
+                            "      ORDER BY year) AS anios " +
+                            "INNER JOIN EstudianteCarrera ec ON anios.year = anioInscripcion || anios.year = anioGraduacion " +
+                            "INNER JOIN Carrera c ON c.id = ec.carrera_id " +
+                            "WHERE year != 0 " +
+                            "ORDER BY c.nombre, anios.year;"
+            ).getResultList();
+
+            for (Object[] fila : resultado) {
+                String nombre = (String) fila[0];
+                int anio = (int) fila[1];
+                BigInteger inscriptosBigInt = (BigInteger) fila[2];
+                BigInteger graduadosBigInt = (BigInteger) fila[3];
+                long inscriptos = inscriptosBigInt.longValue();
+                long graduados = graduadosBigInt.longValue();
+                reporte.add(new ReporteCarreraDto(nombre, anio, (int) inscriptos, (int) graduados));
+            }
+
+            return reporte;
         } finally {
             repositoryFactory.closeEntityManager(em);
         }

@@ -2,6 +2,7 @@ package com.jie.repository;
 
 import com.jie.factory.RepositoryFactory;
 import com.jie.model.EstudianteCarrera;
+import com.jie.model.EstudianteCarreraId;
 
 import javax.persistence.EntityManager;
 import java.util.List;

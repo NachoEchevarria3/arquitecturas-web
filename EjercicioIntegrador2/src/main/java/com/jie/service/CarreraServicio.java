@@ -1,6 +1,7 @@
 package com.jie.service;
 
 import com.jie.dto.CarreraDto;
+import com.jie.dto.ReporteCarreraDto;
 import com.jie.factory.RepositoryFactory;
 import com.jie.model.Carrera;
 import com.jie.model.Estudiante;
@@ -44,5 +45,9 @@ public class CarreraServicio {
         if (carrera == null) throw new IllegalArgumentException("Carrera no puede ser nulo");
         if (ciudad == null) throw new IllegalArgumentException("Ciudad no puede ser nulo");
         return this.carreraRepository.findAllEstudiantesByCarreraAndCiudad(carrera, ciudad);
+    }
+
+    public List<ReporteCarreraDto> generarReporteCarreras() {
+        return this.carreraRepository.generarReporteCarreras();
     }
 }

@@ -17,36 +17,55 @@ public class EstudianteCarrera {
     @MapsId("carreraId")
     private Carrera carrera;
 
-    private LocalDate fechaInscripcion;
-    private LocalDate fechaGraduacion;
+    private int anioInscripcion;
+    private int anioGraduacion;
+    private int antiguedad;
 
     public EstudianteCarrera() {}
 
-    public EstudianteCarrera(Estudiante estudiante, Carrera carrera, LocalDate fechaInscripcion) {
-        this.id = new EstudianteCarreraId(estudiante.getId(), carrera.getId());
+    public EstudianteCarrera(Estudiante estudiante, Carrera carrera, int anioInscripcion) {
+        this.id = new EstudianteCarreraId(estudiante.getDni(), carrera.getId());
         this.estudiante = estudiante;
         this.carrera = carrera;
-        this.fechaInscripcion = fechaInscripcion;
-        this.fechaGraduacion = null;
+        this.anioInscripcion = anioInscripcion;
+        this.anioGraduacion = 0;
+        this.antiguedad = 0;
     }
 
-    public LocalDate getFechaInscripcion() {
-        return fechaInscripcion;
+    public EstudianteCarrera(Estudiante estudiante, Carrera carrera, int anioInscripcion, int anioGraduacion, int antiguedad) {
+        this.id = new EstudianteCarreraId(estudiante.getDni(), carrera.getId());
+        this.estudiante = estudiante;
+        this.carrera = carrera;
+        this.anioInscripcion = anioInscripcion;
+        this.anioGraduacion = anioGraduacion;
+        this.antiguedad = antiguedad;
     }
 
-    public void setFechaInscripcion(LocalDate fechaInscripcion) {
-        this.fechaInscripcion = fechaInscripcion;
+    public int getAnioInscripcion() {
+        return anioInscripcion;
     }
 
-    public LocalDate getFechaGraduacion() {
-        return fechaGraduacion;
+    public void setAnioInscripcion(int anioInscripcion) {
+        this.anioInscripcion = anioInscripcion;
     }
 
-    public void setFechaGraduacion(LocalDate fechaGraduacion) {
-        this.fechaGraduacion = fechaGraduacion;
+    public int getAnioGraduacion() {
+        return anioGraduacion;
+    }
+
+    public void setAnioGraduacion(int anioGraduacion) {
+        this.anioGraduacion = anioGraduacion;
+    }
+
+    public int getAntiguedad() {
+        return antiguedad;
+    }
+
+    public void setAntiguedad(int antiguedad) {
+        this.antiguedad = antiguedad;
     }
 
     public boolean seGraduo() {
-        return fechaGraduacion != null;
+        return anioGraduacion > 0;
     }
 }
