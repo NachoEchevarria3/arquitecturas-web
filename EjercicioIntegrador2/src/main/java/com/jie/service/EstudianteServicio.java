@@ -15,6 +15,7 @@ public class EstudianteServicio {
         this.estudianteRepository = (EstudianteRepository) repositoryFactory.getEstudianteRepository();
     }
 
+    // Ejercicio 2a
     public void save(Estudiante estudiante) {
         if (estudiante == null) throw new IllegalArgumentException("Estudiante no puede ser nulo");
         this.estudianteRepository.save(estudiante);
@@ -39,11 +40,13 @@ public class EstudianteServicio {
         return this.estudianteRepository.findAllOrderedByEdad();
     }
 
+    // Ejercicio 2d
     public Estudiante findByNumeroLibreta(int numeroLibreta) {
         if (numeroLibreta < 1) throw new IllegalArgumentException("Numero de libreta no puede ser negativo");
         return this.estudianteRepository.findByNumeroLibreta(numeroLibreta);
     }
 
+    // Ejercicio 2e
     public List<Estudiante> findAllByGenero(String genero) {
         return this.estudianteRepository.findAllByGenero(genero);
     }

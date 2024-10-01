@@ -37,16 +37,19 @@ public class CarreraServicio {
         this.carreraRepository.delete(carrera);
     }
 
+    // Ejercicio 2f
     public List<CarreraDto> findAllOrderedByCantidadInscriptos() {
         return this.carreraRepository.findAllOrderedByCantidadInscriptos();
     }
 
+    // Ejercicio 2g
     public List<Estudiante> findAllEstudiantesByCarreraAndCiudad(Carrera carrera, String ciudad) {
         if (carrera == null) throw new IllegalArgumentException("Carrera no puede ser nulo");
         if (ciudad == null) throw new IllegalArgumentException("Ciudad no puede ser nulo");
         return this.carreraRepository.findAllEstudiantesByCarreraAndCiudad(carrera, ciudad);
     }
 
+    // Ejercicio 3
     public List<ReporteCarreraDto> generarReporteCarreras() {
         return this.carreraRepository.generarReporteCarreras();
     }

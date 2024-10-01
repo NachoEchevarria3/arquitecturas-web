@@ -33,11 +33,23 @@ public class EstudianteCarreraRepositoryImpl implements Repository<EstudianteCar
 
     @Override
     public List<EstudianteCarrera> findAll() {
-        return List.of();
+        EntityManager em = repositoryFactory.getEntityManager();
+        try {
+            return em.createQuery("SELECT e FROM EstudianteCarrera e").getResultList();
+        } finally {
+            repositoryFactory.closeEntityManager(em);
+        }
     }
 
     @Override
     public void delete(EstudianteCarrera estudianteCarrera) {
-
+        EntityManager em = repositoryFactory.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.remove(estudianteCarrera);
+            em.getTransaction().commit();
+        } finally {
+            repositoryFactory.closeEntityManager(em);
+        }
     }
 }

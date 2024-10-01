@@ -90,6 +90,7 @@ public class Estudiante {
                 "dni=" + dni +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
+                ", edad=" + edad +
                 ", genero='" + genero + '\'' +
                 ", ciudadResidencia='" + ciudadResidencia + '\'' +
                 '}';

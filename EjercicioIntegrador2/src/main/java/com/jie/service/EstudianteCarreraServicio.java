@@ -18,9 +18,11 @@ public class EstudianteCarreraServicio {
         this.estudianteCarreraRepository.save(estudianteCarrera);
     }
 
+    // Ejercicio 2b
     public void matricularEstudiante(Estudiante estudiante, Carrera carrera, int anio) {
         if (estudiante == null) throw new IllegalArgumentException("Estudiante no puede ser nulo");
         if (carrera == null) throw new IllegalArgumentException("Carrera no puede ser nulo");
+        if (anio <= 0) throw new IllegalArgumentException("Anio no puede ser menor que 0");
         this.estudianteCarreraRepository.save(new EstudianteCarrera(estudiante, carrera, anio));
     }
 }
