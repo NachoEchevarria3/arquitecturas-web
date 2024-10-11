@@ -14,9 +14,28 @@ public class EstudianteService {
     @Autowired
     private EstudianteRepository estudianteRepository;
 
-    public void save(Estudiante estudiante) {
-        if (estudiante == null) throw new IllegalArgumentException("El estudiante no puede ser nulo");
-        this.estudianteRepository.save(estudiante);
+    public Estudiante create(Estudiante estudiante) {
+        if (estudiante == null) throw new IllegalArgumentException("Estudiante no puede ser nulo");
+        if (this.estudianteRepository.findById(estudiante.getDni()).isPresent()) {
+            throw new IllegalArgumentException("El estudiante con dni " + estudiante.getDni() + " ya existe");
+        }
+
+        return this.estudianteRepository.save(estudiante);
+    }
+
+    public Estudiante update(int id, Estudiante info) {
+        if (info == null) throw new IllegalArgumentException("Info no puede ser nulo");
+        Estudiante estudiante = this.estudianteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Estudiante no encontrado"));
+
+        estudiante.setNombre(info.getNombre());
+        estudiante.setApellido(info.getApellido());
+        estudiante.setEdad(info.getEdad());
+        estudiante.setGenero(info.getGenero());
+        estudiante.setCiudadResidencia(info.getCiudadResidencia());
+        estudiante.setNumeroLibreta(info.getNumeroLibreta());
+
+        return this.estudianteRepository.save(estudiante);
     }
 
     public Estudiante findById(int id) {
@@ -29,7 +48,8 @@ public class EstudianteService {
     }
 
     public void delete(int id) {
-        if (id < 1) throw new IllegalArgumentException("El ID no puede ser negativo");
+        if (!this.estudianteRepository.existsById(id)) throw new EntityNotFoundException("El estudiante no existe");
+
         this.estudianteRepository.deleteById(id);
     }
 
@@ -41,7 +61,8 @@ public class EstudianteService {
     // Ejercicio 2d
     public Estudiante findByNumeroLibreta(int numeroLibreta) {
         if (numeroLibreta < 1) throw new IllegalArgumentException("Numero de libreta no puede ser negativo");
-        return this.estudianteRepository.findEstudianteByNumeroLibreta(numeroLibreta);
+        return this.estudianteRepository.findEstudianteByNumeroLibreta(numeroLibreta)
+                .orElseThrow(() -> new EntityNotFoundException("El estudiante con libreta " + numeroLibreta + " no existe"));
     }
 
     // Ejercicio 2e

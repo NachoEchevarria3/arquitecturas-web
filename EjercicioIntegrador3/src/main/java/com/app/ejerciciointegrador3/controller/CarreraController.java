@@ -5,6 +5,7 @@ import com.app.ejerciciointegrador3.dto.ReporteCarreraDto;
 import com.app.ejerciciointegrador3.model.Carrera;
 import com.app.ejerciciointegrador3.model.Estudiante;
 import com.app.ejerciciointegrador3.service.CarreraService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,14 +44,9 @@ public class CarreraController {
         return ResponseEntity.status(HttpStatus.OK).body(carreras);
     }
 
-    @GetMapping("/{carreraId}/ciudad/{ciudad}")
-    public ResponseEntity<?> getAllByCiudad(@PathVariable int carreraId, @PathVariable String ciudad) {
-        Carrera carrera = this.carreraService.findById(carreraId);
-        if (carrera == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carrera no existe");
-        }
-
-        List<Estudiante> estudiantes = this.carreraService.findAllEstudiantesByCarreraAndCiudad(carrera, ciudad);
+    @GetMapping("/{carreraId}/ciudad/{ciudad}/estudiantes")
+    public ResponseEntity<?> getAllEstudiantesByCarreraAndCiudad(@PathVariable int carreraId, @PathVariable String ciudad) {
+        List<Estudiante> estudiantes = this.carreraService.findAllEstudiantesByCarreraAndCiudad(carreraId, ciudad);
 
         if (estudiantes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron estudiantes");
@@ -71,33 +67,18 @@ public class CarreraController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Carrera carrera) {
-        this.carreraService.save(carrera);
-        return ResponseEntity.status(HttpStatus.CREATED).body(carrera);
+    public ResponseEntity<?> create(@Valid @RequestBody Carrera carrera) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.carreraService.create(carrera));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable int id, @RequestBody Carrera carrera) {
-        Carrera updatedCarrera = this.carreraService.findById(id);
-        if (updatedCarrera == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carrera no existe");
-        }
-
-        updatedCarrera.setNombre(carrera.getNombre());
-        updatedCarrera.setDuracion(carrera.getDuracion());
-
-        this.carreraService.save(updatedCarrera);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedCarrera);
+    public ResponseEntity<?> update(@PathVariable int id, @Valid @RequestBody Carrera carrera) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.carreraService.update(id, carrera));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        Carrera deletedCarrera = this.carreraService.findById(id);
-        if (deletedCarrera == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carrera no existe");
-        }
-
-        this.carreraService.delete(deletedCarrera.getId());
+        this.carreraService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

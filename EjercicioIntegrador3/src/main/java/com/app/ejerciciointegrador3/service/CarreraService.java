@@ -9,7 +9,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +17,20 @@ public class CarreraService {
     @Autowired
     private CarreraRepository carreraRepository;
 
-    public void save(Carrera carrera) {
+    public Carrera create(Carrera carrera) {
         if (carrera == null) throw new IllegalArgumentException("La carrera no puede ser nulo");
-        this.carreraRepository.save(carrera);
+        return this.carreraRepository.save(carrera);
+    }
+
+    public Carrera update(int id, Carrera info) {
+        if (info == null) throw new IllegalArgumentException("La info no puede ser nulo");
+        Carrera carrera = this.carreraRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("El carrera no existe"));
+
+        carrera.setNombre(info.getNombre());
+        carrera.setDuracion(info.getDuracion());
+
+        return this.carreraRepository.save(carrera);
     }
 
     public Carrera findById(int id) {
@@ -33,7 +43,8 @@ public class CarreraService {
     }
 
     public void delete(int id) {
-        if (id < 1) throw new IllegalArgumentException("El ID no puede ser negativo");
+        if (!this.carreraRepository.existsById(id)) throw new EntityNotFoundException("La carrera no existe");
+
         this.carreraRepository.deleteById(id);
     }
 
@@ -53,9 +64,11 @@ public class CarreraService {
     }
 
     // Ejercicio 2g
-    public List<Estudiante> findAllEstudiantesByCarreraAndCiudad(Carrera carrera, String ciudad) {
-        if (carrera == null) throw new IllegalArgumentException("Carrera no puede ser nulo");
+    public List<Estudiante> findAllEstudiantesByCarreraAndCiudad(int carreraId, String ciudad) {
         if (ciudad == null) throw new IllegalArgumentException("Ciudad no puede ser nulo");
+        Carrera carrera = this.carreraRepository.findById(carreraId)
+                .orElseThrow(() -> new EntityNotFoundException("La carrera no existe"));
+
         return this.carreraRepository.findAllEstudiantesByCarreraAndCiudad(carrera, ciudad);
     }
 

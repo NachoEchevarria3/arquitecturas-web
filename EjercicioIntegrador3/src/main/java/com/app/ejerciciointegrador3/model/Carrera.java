@@ -1,18 +1,23 @@
 package com.app.ejerciciointegrador3.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Min;
 
 import java.util.List;
 
 @Entity
 public class Carrera {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Null(message = "El ID es autoincremental")
     private int id;
 
+    @NotBlank(message = "El nombre de la carrera no puede estar vacío")
     private String nombre;
 
+    @Min(value = 1, message = "La duración debe ser mayor o igual a 1")
     private int duracion;
 
     @OneToMany(mappedBy = "carrera")

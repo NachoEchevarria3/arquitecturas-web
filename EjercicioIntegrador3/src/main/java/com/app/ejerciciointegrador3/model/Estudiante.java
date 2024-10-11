@@ -1,20 +1,33 @@
 package com.app.ejerciciointegrador3.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
 public class Estudiante {
     @Id
+    @Min(value = 1000000, message = "DNI invalido")
     private int dni;
 
+    @NotBlank(message = "El nombre no puede estar vacío")
     private String nombre;
+
+    @NotBlank(message = "El apellido no puede estar vacío")
     private String apellido;
+
+    @Min(value = 17, message = "La edad debe ser mayor o igual a 17")
     private int edad;
+
+    @NotBlank(message = "El genero no puede estar vacío")
     private String genero;
+
+    @NotBlank(message = "La ciudad no puede estar vacía")
     private String ciudadResidencia;
 
     @Column(unique = true)
+    @Min(value = 1, message = "El número de libreta debe ser mayor o igual a 1")
     private int numeroLibreta;
 
     @OneToMany(mappedBy = "estudiante")
