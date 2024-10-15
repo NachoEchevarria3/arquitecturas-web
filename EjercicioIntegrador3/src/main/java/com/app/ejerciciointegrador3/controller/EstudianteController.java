@@ -18,7 +18,7 @@ public class EstudianteController {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        List<Estudiante> estudiantes = this.estudianteService.findAll();
+        List<Estudiante> estudiantes = estudianteService.findAll();
         if (estudiantes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron Carreras");
         }
@@ -33,7 +33,7 @@ public class EstudianteController {
 
     @GetMapping("/orderbyedad")
     public ResponseEntity<?> getOrderedByEdad() {
-        List<Estudiante> estudiantes = this.estudianteService.findAllOrederedByEdad();
+        List<Estudiante> estudiantes = estudianteService.findAllOrederedByEdad();
         if (estudiantes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron estudiantes");
         }
@@ -43,12 +43,12 @@ public class EstudianteController {
 
     @GetMapping("/libreta/{numLibreta}")
     public ResponseEntity<?> getByNumeroLibreta(@PathVariable int numLibreta) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.estudianteService.findByNumeroLibreta(numLibreta));
+        return ResponseEntity.status(HttpStatus.OK).body(estudianteService.findByNumeroLibreta(numLibreta));
     }
 
     @GetMapping("/genero/{genero}")
     public ResponseEntity<?> getAllByGenero(@PathVariable String genero) {
-        List<Estudiante> estudiantes = this.estudianteService.findAllByGenero(genero);
+        List<Estudiante> estudiantes = estudianteService.findAllByGenero(genero);
         if (estudiantes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron Estudiantes con el genero " + genero);
         }
@@ -58,17 +58,17 @@ public class EstudianteController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid  @RequestBody Estudiante estudiante) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.estudianteService.create(estudiante));
+        return ResponseEntity.status(HttpStatus.CREATED).body(estudianteService.create(estudiante));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable int id, @Valid @RequestBody Estudiante estudiante) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.estudianteService.update(id, estudiante));
+        return ResponseEntity.status(HttpStatus.OK).body(estudianteService.update(id, estudiante));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        this.estudianteService.delete(id);
+        estudianteService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -2,7 +2,6 @@ package com.app.ejerciciointegrador3.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Min;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
 public class Carrera {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Null(message = "El ID es autoincremental")
     private int id;
 
     @NotBlank(message = "El nombre de la carrera no puede estar vacío")
@@ -25,8 +23,7 @@ public class Carrera {
 
     public Carrera() {}
 
-    public Carrera(int id, String nombre, int duracion) {
-        this.id = id;
+    public Carrera(String nombre, int duracion) {
         this.nombre = nombre;
         this.duracion = duracion;
     }

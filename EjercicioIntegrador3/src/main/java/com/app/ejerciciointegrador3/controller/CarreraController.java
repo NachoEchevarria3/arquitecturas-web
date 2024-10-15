@@ -1,6 +1,7 @@
 package com.app.ejerciciointegrador3.controller;
 
 import com.app.ejerciciointegrador3.dto.CarreraDto;
+import com.app.ejerciciointegrador3.dto.CarreraRequestDto;
 import com.app.ejerciciointegrador3.dto.ReporteCarreraDto;
 import com.app.ejerciciointegrador3.model.Carrera;
 import com.app.ejerciciointegrador3.model.Estudiante;
@@ -36,7 +37,7 @@ public class CarreraController {
 
     @GetMapping("/orderbycantinscriptos")
     public ResponseEntity<?> getOrderedByCantidadInscriptos() {
-        List<CarreraDto> carreras = this.carreraService.findAllOrderedByCantidadInscriptos();
+        List<CarreraDto> carreras = carreraService.findAllOrderedByCantidadInscriptos();
         if (carreras.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron Carreras");
         }
@@ -46,7 +47,7 @@ public class CarreraController {
 
     @GetMapping("/{carreraId}/ciudad/{ciudad}/estudiantes")
     public ResponseEntity<?> getAllEstudiantesByCarreraAndCiudad(@PathVariable int carreraId, @PathVariable String ciudad) {
-        List<Estudiante> estudiantes = this.carreraService.findAllEstudiantesByCarreraAndCiudad(carreraId, ciudad);
+        List<Estudiante> estudiantes = carreraService.findAllEstudiantesByCarreraAndCiudad(carreraId, ciudad);
 
         if (estudiantes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron estudiantes");
@@ -57,7 +58,7 @@ public class CarreraController {
 
     @GetMapping("/reporte")
     public ResponseEntity<?> getReporteCarreras() {
-        List<ReporteCarreraDto> reporte = this.carreraService.generarReporteCarreras();
+        List<ReporteCarreraDto> reporte = carreraService.generarReporteCarreras();
 
         if (reporte.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron Carreras");
@@ -67,18 +68,18 @@ public class CarreraController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody Carrera carrera) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.carreraService.create(carrera));
+    public ResponseEntity<?> create(@Valid @RequestBody CarreraRequestDto carreraReq) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(carreraService.create(carreraReq));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable int id, @Valid @RequestBody Carrera carrera) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.carreraService.update(id, carrera));
+    public ResponseEntity<?> update(@PathVariable int id, @Valid @RequestBody CarreraRequestDto carreraReq) {
+        return ResponseEntity.status(HttpStatus.OK).body(carreraService.update(id, carreraReq));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        this.carreraService.delete(id);
+        carreraService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

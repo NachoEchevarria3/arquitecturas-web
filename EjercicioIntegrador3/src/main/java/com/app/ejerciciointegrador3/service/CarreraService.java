@@ -1,6 +1,7 @@
 package com.app.ejerciciointegrador3.service;
 
 import com.app.ejerciciointegrador3.dto.CarreraDto;
+import com.app.ejerciciointegrador3.dto.CarreraRequestDto;
 import com.app.ejerciciointegrador3.dto.ReporteCarreraDto;
 import com.app.ejerciciointegrador3.model.Carrera;
 import com.app.ejerciciointegrador3.model.Estudiante;
@@ -17,41 +18,41 @@ public class CarreraService {
     @Autowired
     private CarreraRepository carreraRepository;
 
-    public Carrera create(Carrera carrera) {
+    public Carrera create(CarreraRequestDto carrera) {
         if (carrera == null) throw new IllegalArgumentException("La carrera no puede ser nulo");
-        return this.carreraRepository.save(carrera);
+        return carreraRepository.save(new Carrera(carrera.getNombre(), carrera.getDuracion()));
     }
 
-    public Carrera update(int id, Carrera info) {
+    public Carrera update(int id, CarreraRequestDto info) {
         if (info == null) throw new IllegalArgumentException("La info no puede ser nulo");
-        Carrera carrera = this.carreraRepository.findById(id)
+        Carrera carrera = carreraRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("El carrera no existe"));
 
         carrera.setNombre(info.getNombre());
         carrera.setDuracion(info.getDuracion());
 
-        return this.carreraRepository.save(carrera);
+        return carreraRepository.save(carrera);
     }
 
     public Carrera findById(int id) {
         if (id < 1) throw new IllegalArgumentException("El ID no puede ser negativo");
-        return this.carreraRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("La carrera no existe"));
+        return carreraRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("La carrera no existe"));
     }
 
     public List<Carrera> findAll() {
-        return this.carreraRepository.findAll();
+        return carreraRepository.findAll();
     }
 
     public void delete(int id) {
-        if (!this.carreraRepository.existsById(id)) throw new EntityNotFoundException("La carrera no existe");
+        if (!carreraRepository.existsById(id)) throw new EntityNotFoundException("La carrera no existe");
 
-        this.carreraRepository.deleteById(id);
+        carreraRepository.deleteById(id);
     }
 
     // Ejercicio 2f
     public List<CarreraDto> findAllOrderedByCantidadInscriptos() {
         List<CarreraDto> resultado = new ArrayList<>();
-        List<Object[]> lista = this.carreraRepository.findAllOrderedByCantidadInscriptos();
+        List<Object[]> lista = carreraRepository.findAllOrderedByCantidadInscriptos();
 
         for (Object[] fila : lista) {
             int carreraId = (int) fila[0];
@@ -66,16 +67,16 @@ public class CarreraService {
     // Ejercicio 2g
     public List<Estudiante> findAllEstudiantesByCarreraAndCiudad(int carreraId, String ciudad) {
         if (ciudad == null) throw new IllegalArgumentException("Ciudad no puede ser nulo");
-        Carrera carrera = this.carreraRepository.findById(carreraId)
+        Carrera carrera = carreraRepository.findById(carreraId)
                 .orElseThrow(() -> new EntityNotFoundException("La carrera no existe"));
 
-        return this.carreraRepository.findAllEstudiantesByCarreraAndCiudad(carrera, ciudad);
+        return carreraRepository.findAllEstudiantesByCarreraAndCiudad(carrera, ciudad);
     }
 
     // Ejercicio 2h
     public List<ReporteCarreraDto> generarReporteCarreras() {
         List<ReporteCarreraDto> resultado = new ArrayList<>();
-        List<Object[]> lista = this.carreraRepository.generarReporteCarreras();
+        List<Object[]> lista = carreraRepository.generarReporteCarreras();
 
         for (Object[] fila : lista) {
             String nombreCarrera = (String) fila[0];

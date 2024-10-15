@@ -21,7 +21,7 @@ public class InscripcionService {
 
     public void save(EstudianteCarrera estudianteCarrera) {
         if (estudianteCarrera == null) throw new IllegalArgumentException("EstudianteCarrera no puede ser nulo");
-        this.inscripcionRepository.save(estudianteCarrera);
+        inscripcionRepository.save(estudianteCarrera);
     }
 
     // Ejercicio 2b
@@ -35,6 +35,6 @@ public class InscripcionService {
             throw new IllegalArgumentException("El estudiante ya esta matriculado en esta carrera");
         }
 
-        this.inscripcionRepository.save(new EstudianteCarrera(estudiante, carrera, inscripcion.getAnioInscripcion()));
+        inscripcionRepository.save(new EstudianteCarrera(estudiante, carrera, inscripcion.getAnioInscripcion()));
     }
 }
