@@ -1,4 +1,4 @@
-package com.app.msvcusuarios.entity;
+package com.app.microusuarios.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

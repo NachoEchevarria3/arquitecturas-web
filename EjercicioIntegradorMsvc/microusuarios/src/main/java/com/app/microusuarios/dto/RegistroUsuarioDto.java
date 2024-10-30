@@ -1,4 +1,4 @@
-package com.app.msvcusuarios.dto;
+package com.app.microusuarios.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

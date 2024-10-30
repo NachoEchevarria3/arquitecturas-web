@@ -1,6 +1,6 @@
-package com.app.msvcusuarios.repository;
+package com.app.microusuarios.repository;
 
-import com.app.msvcusuarios.entity.Usuario;
+import com.app.microusuarios.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

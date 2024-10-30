@@ -1,6 +1,6 @@
-package com.app.msvcusuarios.controller;
+package com.app.microusuarios.controller;
 
-import com.app.msvcusuarios.service.UsuarioService;
+import com.app.microusuarios.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

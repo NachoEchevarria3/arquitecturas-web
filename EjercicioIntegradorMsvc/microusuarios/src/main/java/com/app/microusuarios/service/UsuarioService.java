@@ -1,9 +1,9 @@
-package com.app.msvcusuarios.service;
+package com.app.microusuarios.service;
 
-import com.app.msvcusuarios.dto.RegistroUsuarioDto;
-import com.app.msvcusuarios.entity.MercadoPago;
-import com.app.msvcusuarios.entity.Usuario;
-import com.app.msvcusuarios.repository.UsuarioRepository;
+import com.app.microusuarios.dto.RegistroUsuarioDto;
+import com.app.microusuarios.entity.MercadoPago;
+import com.app.microusuarios.entity.Usuario;
+import com.app.microusuarios.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,13 +1,13 @@
-package com.app.msvcusuarios;
+package com.app.microusuarios;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsvcUsuariosApplicationTests {
+class MicrousuariosApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }

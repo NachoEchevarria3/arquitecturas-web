@@ -14,7 +14,7 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: msvc-usuarios
+        - id: usuarios
           uri: http://localhost:8090
           predicates:
             - Path=/api/usuario/**

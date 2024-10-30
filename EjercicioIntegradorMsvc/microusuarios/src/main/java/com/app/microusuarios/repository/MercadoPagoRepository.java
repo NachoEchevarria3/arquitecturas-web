@@ -1,6 +1,6 @@
-package com.app.msvcusuarios.repository;
+package com.app.microusuarios.repository;
 
-import com.app.msvcusuarios.entity.MercadoPago;
+import com.app.microusuarios.entity.MercadoPago;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

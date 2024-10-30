@@ -20,7 +20,7 @@
     <module>api-gateway</module>
     <module>eureka</module>
     <module>config-server</module>
-    <module>msvc-usuarios</module>
+    <module>microusuarios</module>
   </modules>
 
   <properties>
