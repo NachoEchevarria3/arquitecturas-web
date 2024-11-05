@@ -9,10 +9,13 @@
         <option value="$PROJECT_DIR$/eureka/pom.xml" />
         <option value="$PROJECT_DIR$/config-server/pom.xml" />
         <option value="$PROJECT_DIR$/msvc-usuario/pom.xml" />
+        <option value="$PROJECT_DIR$/micro-monopatin/pom.xml" />
+        <option value="$PROJECT_DIR$/micro-mant-monopatin/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/microusuarios/pom.xml" />
         <option value="$PROJECT_DIR$/msvc-usuarios/pom.xml" />
       </set>
     </option>

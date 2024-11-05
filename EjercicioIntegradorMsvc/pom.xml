@@ -20,7 +20,8 @@
     <module>api-gateway</module>
     <module>eureka</module>
     <module>config-server</module>
-    <module>microusuarios</module>
+    <module>micro-monopatin</module>
+    <module>micro-mant-monopatin</module>
   </modules>
 
   <properties>

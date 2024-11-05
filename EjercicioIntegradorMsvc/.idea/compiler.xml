@@ -8,12 +8,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
-        <module name="microusuarios" />
+        <module name="micro-mant-monopatin" />
         <module name="config-server" />
         <module name="eureka" />
+        <module name="micro-monopatin" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="microusuarios" target="21" />
       <module name="msvc-usuarios" target="21" />
     </bytecodeTargetLevel>
   </component>
@@ -22,6 +24,8 @@
       <module name="api-gateway" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="eureka" options="-parameters" />
+      <module name="micro-mant-monopatin" options="-parameters" />
+      <module name="micro-monopatin" options="-parameters" />
       <module name="microusuarios" options="-parameters" />
       <module name="msvc-usuarios" options="-parameters" />
     </option>

@@ -1,11 +1,12 @@
+server:
+  port: 8090
+
 spring:
   application:
-    name: msvc-gateway
-  config:
-    import: optional:configserver:http://localhost:8888
+    name: msvc-monopatin
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/usuarios_db
+    url: jdbc:mysql://localhost:3307/monopatines_db
     username: root
     password:
   jpa:
@@ -16,3 +17,10 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: true
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

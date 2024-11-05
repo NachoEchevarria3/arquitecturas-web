@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: mcsv-mant-monopatin
+  config:
+    import: optional:configserver:http://localhost:8088
