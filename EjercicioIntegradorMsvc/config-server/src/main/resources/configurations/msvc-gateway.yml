@@ -11,6 +11,19 @@ eureka:
 spring:
   application:
     name: msvc-gateway
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/usuarios_db
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
   cloud:
     gateway:
       discovery:
