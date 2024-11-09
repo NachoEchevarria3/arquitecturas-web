@@ -22,6 +22,7 @@
     <module>config-server</module>
     <module>micro-monopatin</module>
     <module>micro-mant-monopatin</module>
+    <module>micro-parada</module>
   </modules>
 
   <properties>

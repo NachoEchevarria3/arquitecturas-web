@@ -1,7 +1,6 @@
-package com.app.micromantmonopatin.dto;
+package com.app.microparada.dto;
 
-
-import com.app.micromantmonopatin.constant.EstadoMonopatin;
+import com.app.microparada.constant.EstadoMonopatin;
 
 public record MonopatinDTO(
         Long id,

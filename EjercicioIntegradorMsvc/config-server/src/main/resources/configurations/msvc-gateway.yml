@@ -38,3 +38,7 @@ spring:
           uri: http://localhost:8091
           predicates:
             - Path=/api/mantenimiento/**
+        - id: paradas
+          uri: http://localhost:8092
+          predicates:
+            - Path=/api/parada/**

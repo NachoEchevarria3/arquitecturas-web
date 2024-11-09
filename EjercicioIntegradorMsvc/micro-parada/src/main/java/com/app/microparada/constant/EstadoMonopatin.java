@@ -1,4 +1,4 @@
-package com.app.micromonopatin.constant;
+package com.app.microparada.constant;
 
 public enum EstadoMonopatin {
     MANTENIMIENTO,

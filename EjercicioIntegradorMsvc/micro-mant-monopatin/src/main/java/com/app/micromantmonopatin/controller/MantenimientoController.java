@@ -1,7 +1,8 @@
 package com.app.micromantmonopatin.controller;
 
 import com.app.micromantmonopatin.dto.ApiResponse;
-import com.app.micromantmonopatin.entity.Mantenimiento;
+import com.app.micromantmonopatin.dto.CreateMantenimientoDTO;
+import com.app.micromantmonopatin.dto.MantenimientoDTO;
 import com.app.micromantmonopatin.service.MantenimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class MantenimientoController {
     private MantenimientoService mantenimientoService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Mantenimiento>>> getMantenimientos() {
+    public ResponseEntity<ApiResponse<List<MantenimientoDTO>>> getMantenimientos() {
         return ResponseEntity.status(HttpStatus.OK.value()).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Lista de mantenimientos obtenida con éxito.",
@@ -26,7 +27,7 @@ public class MantenimientoController {
     }
 
     @GetMapping("/monopatin/{idMonopatin}")
-    public ResponseEntity<ApiResponse<List<Mantenimiento>>> getMantenimientosByIdMonopatin(@PathVariable Long idMonopatin) {
+    public ResponseEntity<ApiResponse<List<MantenimientoDTO>>> getMantenimientosByIdMonopatin(@PathVariable Long idMonopatin) {
         return ResponseEntity.status(HttpStatus.OK.value()).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Lista de mantenimientos obtenida con éxito.",
@@ -35,7 +36,7 @@ public class MantenimientoController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Mantenimiento>> create(@RequestBody Mantenimiento mantenimiento) {
+    public ResponseEntity<ApiResponse<MantenimientoDTO>> create(@RequestBody CreateMantenimientoDTO mantenimiento) {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(new ApiResponse<>(
                 HttpStatus.CREATED.value(),
                 "Mantenimiento creado con éxito.",
@@ -44,7 +45,7 @@ public class MantenimientoController {
     }
 
     @PostMapping("/{id}/finalizar")
-    public ResponseEntity<ApiResponse<Mantenimiento>> finalizar(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<MantenimientoDTO>> finalizar(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK.value()).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Mantenimiento finalizado con éxito.",

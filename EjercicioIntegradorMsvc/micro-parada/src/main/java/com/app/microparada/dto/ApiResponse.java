@@ -1,4 +1,4 @@
-package com.app.micromantmonopatin.dto;
+package com.app.microparada.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

@@ -1,9 +1,10 @@
 package com.app.micromonopatin.controller;
 
+import com.app.micromonopatin.constant.EstadoMonopatin;
 import com.app.micromonopatin.dto.CreateMonopatinDTO;
-import com.app.micromonopatin.dto.EstadoDTO;
 import com.app.micromonopatin.dto.ApiResponse;
-import com.app.micromonopatin.entity.Monopatin;
+import com.app.micromonopatin.dto.MonopatinDTO;
+import com.app.micromonopatin.dto.ParadaDTO;
 import com.app.micromonopatin.service.MonopatinService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class MonopatinController {
     private MonopatinService monopatinService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Monopatin>>> getMonopatines() {
+    public ResponseEntity<ApiResponse<List<MonopatinDTO>>> getMonopatines() {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Monopatines obtenidos con éxito",
@@ -29,11 +30,20 @@ public class MonopatinController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Monopatin>> getMonopatinById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<MonopatinDTO>> getMonopatinById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Monopatin obtenido con éxito",
                 monopatinService.findById(id)
+        ));
+    }
+
+    @GetMapping("/parada/{idParada}")
+    public ResponseEntity<ApiResponse<List<MonopatinDTO>>> getMonopatinesByParadaId(@PathVariable Long idParada) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Monopatines obtenidos con éxito",
+                monopatinService.findMonopatinesByParadaId(idParada)
         ));
     }
 
@@ -47,16 +57,25 @@ public class MonopatinController {
         ));
     }
 
-    @PostMapping("/{idMonopatin}/estado")
-    public ResponseEntity<ApiResponse<Monopatin>> actualizarEstado(@PathVariable Long idMonopatin, @Valid @RequestBody EstadoDTO estadoDTO) {
+    @PutMapping("/{idMonopatin}/estado/{estado}")
+    public ResponseEntity<ApiResponse<MonopatinDTO>> actualizarEstado(@PathVariable Long idMonopatin, @PathVariable EstadoMonopatin estado) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Estado actualizado con éxito.",
-                monopatinService.actualizarEstado(idMonopatin, estadoDTO)
+                monopatinService.actualizarEstado(idMonopatin, estado)
         ));
     }
 
-    @PostMapping("/{idMonopatin}/kilometros/{cantKilometros}")
+    @PutMapping("/{idMonopatin}/ubicar-en-parada/{idParada}")
+    public ResponseEntity<ApiResponse<ParadaDTO>> ubicarMonopatinEnParada(@PathVariable Long idMonopatin, @PathVariable Long idParada) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "El monopatin se ubicó en la parada con éxito.",
+                monopatinService.ubicarMonopatinEnParada(idMonopatin, idParada)
+        ));
+    }
+
+    @PutMapping("/{idMonopatin}/kilometros/{cantKilometros}")
     public ResponseEntity<ApiResponse<?>> actualizarKilometros(@PathVariable Long idMonopatin, @PathVariable int cantKilometros) {
         monopatinService.actualizarKilometros(idMonopatin, cantKilometros);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
@@ -66,12 +85,22 @@ public class MonopatinController {
         ));
     }
 
-    @PostMapping("/{idMonopatin}/tiempo-de-uso/{cantTiempoDeUso}")
+    @PutMapping("/{idMonopatin}/tiempo-de-uso/{cantTiempoDeUso}")
     public ResponseEntity<ApiResponse<?>> actualizarTiempoDeUso(@PathVariable Long idMonopatin, @PathVariable int cantTiempoDeUso) {
         monopatinService.actualizarTiempoDeUso(idMonopatin, cantTiempoDeUso);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Tiempo de uso actualizado con éxito.",
+                null
+        ));
+    }
+
+    @PutMapping("/{idMonopatin}/reset-estadisticas")
+    public ResponseEntity<ApiResponse<?>> resetEstadisticas(@PathVariable Long idMonopatin) {
+        monopatinService.resetKilometrosYTiempoDeUso(idMonopatin);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Los kilometros del momopatin se resetearon con éxito.",
                 null
         ));
     }
