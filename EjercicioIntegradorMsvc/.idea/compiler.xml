@@ -7,11 +7,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="api-gateway" />
-        <module name="micro-mant-monopatin" />
         <module name="micro-parada" />
         <module name="config-server" />
+        <module name="micro-tarifa" />
         <module name="eureka" />
+        <module name="api-gateway" />
+        <module name="micro-mant-monopatin" />
+        <module name="micro-viaje" />
+        <module name="micro-pago" />
         <module name="micro-monopatin" />
       </profile>
     </annotationProcessing>
@@ -27,7 +30,10 @@
       <module name="eureka" options="-parameters" />
       <module name="micro-mant-monopatin" options="-parameters" />
       <module name="micro-monopatin" options="-parameters" />
+      <module name="micro-pago" options="-parameters" />
       <module name="micro-parada" options="-parameters" />
+      <module name="micro-tarifa" options="-parameters" />
+      <module name="micro-viaje" options="-parameters" />
       <module name="microusuarios" options="-parameters" />
       <module name="msvc-usuarios" options="-parameters" />
     </option>

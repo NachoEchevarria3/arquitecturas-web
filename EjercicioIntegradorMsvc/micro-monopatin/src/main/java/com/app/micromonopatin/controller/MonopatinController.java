@@ -1,10 +1,8 @@
 package com.app.micromonopatin.controller;
 
 import com.app.micromonopatin.constant.EstadoMonopatin;
-import com.app.micromonopatin.dto.CreateMonopatinDTO;
-import com.app.micromonopatin.dto.ApiResponse;
-import com.app.micromonopatin.dto.MonopatinDTO;
-import com.app.micromonopatin.dto.ParadaDTO;
+import com.app.micromonopatin.constant.TipoReporte;
+import com.app.micromonopatin.dto.*;
 import com.app.micromonopatin.service.MonopatinService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/monopatin")
@@ -26,6 +25,36 @@ public class MonopatinController {
                 HttpStatus.OK.value(),
                 "Monopatines obtenidos con éxito",
                 monopatinService.findAll()
+        ));
+    }
+
+    @GetMapping("/reporte")
+    public ResponseEntity<ApiResponse<ReporteMonopatinesDTO>> getReporteMonopatines(@Valid @RequestParam TipoReporte tipo) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Reporte de monopatines obtenido con éxito.",
+                monopatinService.getReporteMonopatines(tipo)
+        ));
+    }
+
+    @GetMapping("/minimo-viajes/{minimoViajes}/anio/{anio}")
+    public ResponseEntity<ApiResponse<List<MonopatinDTO>>> getMonopatinesConMinimoDeViajes(
+            @PathVariable Integer minimoViajes,
+            @PathVariable Integer anio
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Monopatines obtenidos con éxito.",
+                monopatinService.getMonopatinesConMinimoDeViajes(minimoViajes, anio)
+        ));
+    }
+
+    @GetMapping("/disponibles-vs-mantenimiento")
+    public ResponseEntity<ApiResponse<Map<EstadoMonopatin, Integer>>> getMonopatinesDisponiblesVsMantenimiento() {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Monopatines obtenidos con éxito.",
+                monopatinService.getMonopatinesEnOperacionYEnMantenimiento()
         ));
     }
 
@@ -91,6 +120,16 @@ public class MonopatinController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Tiempo de uso actualizado con éxito.",
+                null
+        ));
+    }
+
+    @PutMapping("/{idMonopatin}/tiempo-de-pausa/{cantTiempoDePausa}")
+    public ResponseEntity<ApiResponse<?>> actualizarTiempoDePausa(@PathVariable Long idMonopatin, @PathVariable int cantTiempoDePausa) {
+        monopatinService.actualizarTiempoDePausa(idMonopatin, cantTiempoDePausa);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Tiempo de pausa actualizado con éxito.",
                 null
         ));
     }

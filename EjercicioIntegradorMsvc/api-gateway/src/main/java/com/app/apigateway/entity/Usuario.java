@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -45,7 +45,10 @@ public class Usuario {
     private String telefono;
 
     @Column(name = "fecha_alta", nullable = false)
-    private Date fechaAlta;
+    private LocalDate fechaAlta;
+
+    @Column(nullable = false)
+    private Boolean activo;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -61,6 +64,7 @@ public class Usuario {
         this.email = email;
         this.password = password;
         this.telefono = telefono;
-        this.fechaAlta = new Date();
+        this.fechaAlta = LocalDate.now();
+        this.activo = true;
     }
 }

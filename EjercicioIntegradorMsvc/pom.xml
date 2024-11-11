@@ -23,6 +23,9 @@
     <module>micro-monopatin</module>
     <module>micro-mant-monopatin</module>
     <module>micro-parada</module>
+    <module>micro-tarifa</module>
+    <module>micro-viaje</module>
+    <module>micro-pago</module>
   </modules>
 
   <properties>

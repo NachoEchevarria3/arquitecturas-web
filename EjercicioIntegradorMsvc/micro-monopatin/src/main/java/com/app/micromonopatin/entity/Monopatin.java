@@ -43,7 +43,7 @@ public class Monopatin {
     @Column(name = "historial_tiempo_de_uso")
     private int historialTiempoDeUso;
 
-    @Min(value = 0, message = "tiempoDeUso debe ser mayor o igual a 0.")
+    @Min(value = 0, message = "tiempoDePausa debe ser mayor o igual a 0.")
     @Column(name = "tiempo_de_pausa")
     private int tiempoDePausa;
 

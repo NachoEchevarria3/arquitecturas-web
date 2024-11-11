@@ -2,6 +2,7 @@ package com.app.micromantmonopatin.controller;
 
 import com.app.micromantmonopatin.dto.ApiResponse;
 import com.app.micromantmonopatin.dto.CreateMantenimientoDTO;
+import com.app.micromantmonopatin.dto.FinalizarMantenimientoDTO;
 import com.app.micromantmonopatin.dto.MantenimientoDTO;
 import com.app.micromantmonopatin.service.MantenimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class MantenimientoController {
         ));
     }
 
-    @PostMapping
+    @PostMapping("/iniciar")
     public ResponseEntity<ApiResponse<MantenimientoDTO>> create(@RequestBody CreateMantenimientoDTO mantenimiento) {
         return ResponseEntity.status(HttpStatus.CREATED.value()).body(new ApiResponse<>(
                 HttpStatus.CREATED.value(),
@@ -44,12 +45,12 @@ public class MantenimientoController {
         ));
     }
 
-    @PostMapping("/{id}/finalizar")
-    public ResponseEntity<ApiResponse<MantenimientoDTO>> finalizar(@PathVariable Long id) {
+    @PostMapping("/finalizar")
+    public ResponseEntity<ApiResponse<MantenimientoDTO>> finalizar(@RequestBody FinalizarMantenimientoDTO mantenimiento) {
         return ResponseEntity.status(HttpStatus.OK.value()).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Mantenimiento finalizado con éxito.",
-                mantenimientoService.finalizarMantenimiento(id)
+                mantenimientoService.finalizarMantenimiento(mantenimiento)
         ));
     }
 }

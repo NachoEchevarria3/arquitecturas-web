@@ -3,6 +3,7 @@ package com.app.micromantmonopatin.service;
 import com.app.micromantmonopatin.client.MonopatinClient;
 import com.app.micromantmonopatin.constant.EstadoMonopatin;
 import com.app.micromantmonopatin.dto.CreateMantenimientoDTO;
+import com.app.micromantmonopatin.dto.FinalizarMantenimientoDTO;
 import com.app.micromantmonopatin.dto.MantenimientoDTO;
 import com.app.micromantmonopatin.entity.Mantenimiento;
 import com.app.micromantmonopatin.repository.MantenimientoRepository;
@@ -82,8 +83,8 @@ public class MantenimientoService {
         )).toList();
     }
 
-    public MantenimientoDTO finalizarMantenimiento(Long idMantenimiento) {
-        Mantenimiento mantenimiento = mantenimientoRepository.findById(idMantenimiento)
+    public MantenimientoDTO finalizarMantenimiento(FinalizarMantenimientoDTO mantenimientoDto) {
+        Mantenimiento mantenimiento = mantenimientoRepository.findById(mantenimientoDto.idMantenimiento())
                 .orElseThrow(() -> new EntityNotFoundException("El mantenimiento no existe."));
 
         if (monopatinClient.getMonopatinById(mantenimiento.getIdMonopatin()).data().estado().equals(EstadoMonopatin.DISPONIBLE)) {
@@ -91,8 +92,8 @@ public class MantenimientoService {
         }
 
         mantenimiento.setFechaFin(LocalDateTime.now());
+        monopatinClient.ubicarMonopatinEnParada(mantenimiento.getIdMonopatin(), mantenimientoDto.idParada());
         mantenimientoRepository.save(mantenimiento);
-        monopatinClient.actualizarEstadoMonopatin(mantenimiento.getIdMonopatin(), EstadoMonopatin.DISPONIBLE);
         monopatinClient.resetEstadisticas(mantenimiento.getIdMonopatin());
         return new MantenimientoDTO(
                 mantenimiento.getId(),

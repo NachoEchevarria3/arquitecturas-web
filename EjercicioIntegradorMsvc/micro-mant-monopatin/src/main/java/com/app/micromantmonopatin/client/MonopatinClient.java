@@ -3,6 +3,7 @@ package com.app.micromantmonopatin.client;
 import com.app.micromantmonopatin.dto.ApiResponse;
 import com.app.micromantmonopatin.dto.MonopatinDTO;
 import com.app.micromantmonopatin.constant.EstadoMonopatin;
+import com.app.micromonopatin.dto.ParadaDTO;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,4 +20,7 @@ public interface MonopatinClient {
 
     @GetMapping("/{id}")
     ApiResponse<MonopatinDTO> getMonopatinById(@PathVariable Long id);
+
+    @PutMapping("/{idMonopatin}/ubicar-en-parada/{idParada}")
+    ApiResponse<ParadaDTO> ubicarMonopatinEnParada(@PathVariable Long idMonopatin, @PathVariable Long idParada);
 }

@@ -42,3 +42,15 @@ spring:
           uri: http://localhost:8092
           predicates:
             - Path=/api/parada/**
+        - id: tarifas
+          uri: http://localhost:8093
+          predicates:
+            - Path=/api/tarifa/**
+        - id: viajes
+          uri: http://localhost:8094
+          predicates:
+            - Path=/api/viaje/**
+        - id: pagos
+          uri: http://localhost:8095
+          predicates:
+            - Path=/api/pago/**

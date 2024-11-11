@@ -33,11 +33,6 @@ public class MercadoPagoService {
         if (cantidad <= 0) throw new IllegalArgumentException("Cantidad invalida.");
         MercadoPago cuenta = findById(idCuenta);
 
-        // Verifica que tenga suficiente saldo
-        if (cuenta.getSaldo() - cantidad < 0) {
-            throw new IllegalArgumentException("Saldo insuficiente.");
-        }
-
         cuenta.setSaldo(cuenta.getSaldo() - cantidad);
         mercadoPagoRepository.save(cuenta);
     }

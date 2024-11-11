@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: msvc-pago
+  config:
+    import: optional:configserver:http://localhost:8888

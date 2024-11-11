@@ -12,6 +12,9 @@
         <option value="$PROJECT_DIR$/micro-monopatin/pom.xml" />
         <option value="$PROJECT_DIR$/micro-mant-monopatin/pom.xml" />
         <option value="$PROJECT_DIR$/micro-parada/pom.xml" />
+        <option value="$PROJECT_DIR$/micro-tarifa/pom.xml" />
+        <option value="$PROJECT_DIR$/micro-viaje/pom.xml" />
+        <option value="$PROJECT_DIR$/micro-pago/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
