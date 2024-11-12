@@ -6,6 +6,7 @@ import com.app.apigateway.entity.MercadoPago;
 import com.app.apigateway.entity.Usuario;
 import com.app.apigateway.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

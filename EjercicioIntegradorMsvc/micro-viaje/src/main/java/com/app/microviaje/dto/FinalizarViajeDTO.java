@@ -7,9 +7,6 @@ public record FinalizarViajeDTO(
         @NotNull(message = "idParada no puede ser nulo.")
         Long idParada,
 
-        @NotNull(message = "idCuentaMercadoPago no puede ser nulo.")
-        Long idCuentaMercadoPago,
-
         @Positive(message = "kilometrosRecorridos debe ser positivo.")
         int kilometrosRecorridos
 ) {

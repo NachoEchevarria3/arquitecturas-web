@@ -70,7 +70,7 @@ public class ViajeController {
         viajeService.finalizarViaje(id, viaje);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
                 HttpStatus.CREATED.value(),
-                "Viaje comenzado con éxito.",
+                "Viaje finalizado con éxito.",
                 null
         ));
     }

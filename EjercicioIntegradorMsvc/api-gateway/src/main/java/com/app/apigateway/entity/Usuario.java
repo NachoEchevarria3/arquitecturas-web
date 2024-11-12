@@ -10,7 +10,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -50,6 +52,7 @@ public class Usuario {
     @Column(nullable = false)
     private Boolean activo;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "usuario_mercado_pago",
@@ -66,5 +69,19 @@ public class Usuario {
         this.telefono = telefono;
         this.fechaAlta = LocalDate.now();
         this.activo = true;
+        this.cuentasMercadoPago = new ArrayList<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

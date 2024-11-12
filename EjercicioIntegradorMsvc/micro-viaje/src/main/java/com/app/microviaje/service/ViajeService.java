@@ -143,16 +143,16 @@ public class ViajeService {
         precioTotal += viaje.getTarifaInicial();
 
         Pausa pausaExtensa = viaje.getPausas().stream()
-                .filter(p -> calcularTiempo(p.getFechaInicio(), p.getFechaFin()) > 15)
+                .filter(p -> calcularTiempo(p.getFechaInicio(), p.getFechaFin()) > 5)
                 .findFirst().orElse(null);
 
         if (pausaExtensa != null) {
             // Tarifa normal hasta el inicio de la pausa extensa, incluyendo los primeros 15 minutos de la pausa
-            int tiempoAntesPausaExtensa = calcularTiempo(viaje.getFechaInicio(), pausaExtensa.getFechaInicio()) + 15;
+            int tiempoAntesPausaExtensa = calcularTiempo(viaje.getFechaInicio(), pausaExtensa.getFechaInicio()) + 5;
             precioTotal += viaje.getTarifaPorMinuto() * tiempoAntesPausaExtensa;
 
             // Tarifa extra dentro de la pausa extensa, solo el tiempo que excede los primeros 15 minutos
-            int tiempoExtraPausa = calcularTiempo(pausaExtensa.getFechaInicio(), pausaExtensa.getFechaFin()) - 15;
+            int tiempoExtraPausa = calcularTiempo(pausaExtensa.getFechaInicio(), pausaExtensa.getFechaFin()) - 5;
             precioTotal += viaje.getTarifaPausaExtensa() * tiempoExtraPausa;
 
             // Tarifa extra para el resto del viaje después de la pausa extensa
