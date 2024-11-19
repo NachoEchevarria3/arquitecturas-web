@@ -1,10 +1,8 @@
 package com.app.apigateway.entity;
 
+import com.app.apigateway.constant.Rol;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.transaction.UserTransaction;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -62,12 +60,9 @@ public class Usuario implements UserDetails {
     )
     List<MercadoPago> cuentasMercadoPago;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "usuario_rol",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "rol_id")
-    )
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"))
+    @Enumerated(EnumType.STRING)
     private Set<Rol> roles;
 
     public Usuario(String email, String username, String password, String nombre, String apellido, String telefono) {
@@ -80,6 +75,7 @@ public class Usuario implements UserDetails {
         this.fechaAlta = LocalDate.now();
         this.activo = true;
         this.cuentasMercadoPago = new ArrayList<>();
+        this.roles = new HashSet<>();
     }
 
     @Override
@@ -98,7 +94,7 @@ public class Usuario implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombre()))
+                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.name()))
                 .collect(Collectors.toList());
     }
 

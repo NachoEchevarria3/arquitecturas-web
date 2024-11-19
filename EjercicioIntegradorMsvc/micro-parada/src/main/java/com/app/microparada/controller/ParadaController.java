@@ -37,7 +37,7 @@ public class ParadaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ParadaDTO>> getParadaById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ParadaDTO>> getParadaById(@PathVariable String id) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Parada obtenida con éxito.",
@@ -56,7 +56,7 @@ public class ParadaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteParada(@PathVariable Long id) {
+    public ResponseEntity<?> deleteParada(@PathVariable String id) {
         paradaService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

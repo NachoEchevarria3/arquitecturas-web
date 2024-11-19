@@ -11,5 +11,5 @@ import java.util.List;
 @FeignClient(name = "msvc-monopatin", url = "http://localhost:8080/api/monopatin")
 public interface MonopatinClient {
     @GetMapping("/parada/{idParada}")
-    ApiResponse<List<MonopatinDTO>> getMonopatinesByParadaId(@PathVariable Long idParada);
+    ApiResponse<List<MonopatinDTO>> getMonopatinesByParadaId(@PathVariable String idParada);
 }

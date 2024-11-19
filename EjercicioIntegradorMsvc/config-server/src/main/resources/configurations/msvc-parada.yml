@@ -6,7 +6,8 @@ spring:
     name: msvc-parada
   data:
     mongodb:
-      uri: mongodb://root:root@localhost:27017/paradas_db
+      uri: mongodb://root:password@localhost:27017/
+      database: paradas_db
   jackson:
     deserialization:
       fail-on-unknown-properties: true

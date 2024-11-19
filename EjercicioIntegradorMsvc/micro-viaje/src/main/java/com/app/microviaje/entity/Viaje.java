@@ -28,7 +28,7 @@ public class Viaje {
     private Long metodoPagoAsociado;
 
     @Column(name = "id_parada_destino")
-    private Long idParadaDestino;
+    private String idParadaDestino;
 
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDateTime fechaInicio;

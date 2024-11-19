@@ -25,8 +25,8 @@ public class JwtService {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(usuario.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis() + (EXPIRATION_MINUTES * 60 * 1000)))
-                .setExpiration(new Date(System.currentTimeMillis()))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + (EXPIRATION_MINUTES * 60 * 1000)))
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .signWith(generateSecretKey())
                 .compact();

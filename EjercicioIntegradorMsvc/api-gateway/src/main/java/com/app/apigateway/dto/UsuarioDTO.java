@@ -5,8 +5,8 @@ import java.util.Set;
 
 public record UsuarioDTO(
         Long id,
-        String username,
         String email,
+        String username,
         String nombre,
         String apellido,
         String telefono,

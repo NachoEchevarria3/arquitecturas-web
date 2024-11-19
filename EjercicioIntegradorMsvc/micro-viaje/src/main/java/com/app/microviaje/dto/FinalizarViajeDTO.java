@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Positive;
 
 public record FinalizarViajeDTO(
         @NotNull(message = "idParada no puede ser nulo.")
-        Long idParada,
+        String idParada,
 
         @Positive(message = "kilometrosRecorridos debe ser positivo.")
         int kilometrosRecorridos

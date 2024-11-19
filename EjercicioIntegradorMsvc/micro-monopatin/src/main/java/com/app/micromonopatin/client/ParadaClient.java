@@ -11,7 +11,7 @@ import java.util.List;
 @FeignClient(name = "msvc-parada", url = "localhost:8080/api/parada")
 public interface ParadaClient {
     @GetMapping("/{id}")
-    ApiResponse<ParadaDTO> getParadaById(@PathVariable("id") Long id);
+    ApiResponse<ParadaDTO> getParadaById(@PathVariable("id") String id);
 
     @GetMapping("/ubicacion/{ubicacion}")
     ApiResponse<List<ParadaDTO>> getParadasByUbicacion(@PathVariable("ubicacion") String ubicacion);

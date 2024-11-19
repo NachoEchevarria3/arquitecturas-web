@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface MonopatinRepository extends JpaRepository<Monopatin, Long> {
-    List<Monopatin> findMonopatinByIdParada(Long idParada);
+    List<Monopatin> findMonopatinByIdParada(String idParada);
     List<Monopatin> findByOrderByKilometrosDesc();
     List<Monopatin> findByOrderByTiempoDeUsoDesc();
 
@@ -26,5 +26,5 @@ public interface MonopatinRepository extends JpaRepository<Monopatin, Long> {
     List<Monopatin> findByEstado(EstadoMonopatin estado);
 
     @Query("SELECT m FROM Monopatin m WHERE m.idParada IN :paradaIds")
-    List<Monopatin> findByParadaIds(@Param("paradaIds") List<Long> paradaIds);
+    List<Monopatin> findByParadaIds(@Param("paradaIds") List<String> paradaIds);
 }

@@ -22,5 +22,5 @@ public interface MonopatinClient {
     ApiResponse<MonopatinDTO> getMonopatinById(@PathVariable Long id);
 
     @PutMapping("/{idMonopatin}/ubicar-en-parada/{idParada}")
-    ApiResponse<ParadaDTO> ubicarMonopatinEnParada(@PathVariable Long idMonopatin, @PathVariable Long idParada);
+    ApiResponse<ParadaDTO> ubicarMonopatinEnParada(@PathVariable Long idMonopatin, @PathVariable String idParada);
 }

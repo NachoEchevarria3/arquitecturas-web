@@ -68,7 +68,7 @@ public class MonopatinController {
     }
 
     @GetMapping("/parada/{idParada}")
-    public ResponseEntity<ApiResponse<List<MonopatinDTO>>> getMonopatinesByParadaId(@PathVariable Long idParada) {
+    public ResponseEntity<ApiResponse<List<MonopatinDTO>>> getMonopatinesByParadaId(@PathVariable String idParada) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Monopatines obtenidos con éxito",
@@ -105,7 +105,7 @@ public class MonopatinController {
     }
 
     @PutMapping("/{idMonopatin}/ubicar-en-parada/{idParada}")
-    public ResponseEntity<ApiResponse<ParadaDTO>> ubicarMonopatinEnParada(@PathVariable Long idMonopatin, @PathVariable Long idParada) {
+    public ResponseEntity<ApiResponse<ParadaDTO>> ubicarMonopatinEnParada(@PathVariable Long idMonopatin, @PathVariable String idParada) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "El monopatin se ubicó en la parada con éxito.",

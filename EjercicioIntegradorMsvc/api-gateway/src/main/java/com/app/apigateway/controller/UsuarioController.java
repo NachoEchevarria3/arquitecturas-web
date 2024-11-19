@@ -1,7 +1,6 @@
 package com.app.apigateway.controller;
 
 import com.app.apigateway.dto.ApiResponse;
-import com.app.apigateway.dto.RegistroUsuarioDto;
 import com.app.apigateway.dto.UsuarioDTO;
 import com.app.apigateway.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<UsuarioDTO>>> getUsuarios() {
+    @GetMapping ResponseEntity<ApiResponse<List<UsuarioDTO>>> getUsuarios() {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Usuarios obtenidos con éxito.",

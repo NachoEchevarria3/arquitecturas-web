@@ -52,9 +52,9 @@ public class Monopatin {
     private int limiteTiempoDeUso;
 
     @Column(name = "id_parada")
-    private Long idParada;
+    private String idParada;
 
-    public Monopatin(int limiteKilometros, int limiteTiempoDeUso, Long idParada) {
+    public Monopatin(int limiteKilometros, int limiteTiempoDeUso, String idParada) {
         this.estado = EstadoMonopatin.DISPONIBLE;
         this.kilometros = 0;
         this.historialKilometros = 0;

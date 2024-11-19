@@ -75,7 +75,7 @@ public class MonopatinService {
         );
     }
 
-    public List<MonopatinDTO> findMonopatinesByParadaId(Long paradaId) {
+    public List<MonopatinDTO> findMonopatinesByParadaId(String paradaId) {
         ApiResponse<ParadaDTO> parada = paradaClient.getParadaById(paradaId);
         List<Monopatin> monopatines = monopatinRepository.findMonopatinByIdParada(paradaId);
         return monopatines.stream().map(m -> new MonopatinDTO(
@@ -94,7 +94,7 @@ public class MonopatinService {
     public List<MonopatinDTO> findMonopatinesByUbicacion(String ubicacion) {
         ApiResponse<List<ParadaDTO>> paradas = paradaClient.getParadasByUbicacion(ubicacion);
 
-        List<Long> idsParadas = paradas.data().stream().map(ParadaDTO::id).toList();
+        List<String> idsParadas = paradas.data().stream().map(ParadaDTO::id).toList();
         List<Monopatin> monopatines = monopatinRepository.findByParadaIds(idsParadas);
 
         if (monopatines.isEmpty()) {
@@ -121,7 +121,7 @@ public class MonopatinService {
         monopatinRepository.deleteById(id);
     }
 
-    public ParadaDTO ubicarMonopatinEnParada(Long monopatinId, Long paradaId) {
+    public ParadaDTO ubicarMonopatinEnParada(Long monopatinId, String paradaId) {
         ApiResponse<ParadaDTO> parada = paradaClient.getParadaById(paradaId);
         Monopatin monopatin = monopatinRepository.findById(monopatinId)
                 .orElseThrow(() -> new EntityNotFoundException("No existe un monopatin con ese id."));

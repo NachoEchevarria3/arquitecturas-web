@@ -7,6 +7,6 @@ public record FinalizarMantenimientoDTO(
         Long idMantenimiento,
 
         @NotNull(message = "idParada no puede ser nulo.")
-        Long idParada
+        String idParada
 ) {
 }

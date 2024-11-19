@@ -1,6 +1,6 @@
 package com.app.apigateway.constant;
 
-public enum RolEnum {
+public enum Rol {
     USUARIO,
     ADMINISTRADOR,
     ENCARGADO_MANTENIMIENTO

@@ -11,6 +11,6 @@ public record MonopatinDTO(
         int tiempoDeUso,
         int historialTiempoDeUso,
         int limiteTiempoDeUso,
-        Long paradaId
+        String paradaId
 ) {
 }

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ParadaRepository extends MongoRepository<Parada, Long> {
+public interface ParadaRepository extends MongoRepository<Parada, String> {
     List<Parada> findByUbicacion(String ubicacion);
 }

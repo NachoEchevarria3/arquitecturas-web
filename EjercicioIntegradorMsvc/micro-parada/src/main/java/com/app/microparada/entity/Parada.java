@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 public class Parada {
     @Id
-    private Long id;
+    private String id;
 
     private String ubicacion;
 

@@ -50,14 +50,14 @@ public class ParadaService {
                 .toList();
     }
 
-    public ParadaDTO findById(Long id) {
-        if (id == null || id <= 0) throw new IllegalArgumentException("ID invalido.");
+    public ParadaDTO findById(String id) {
+        if (id == null) throw new IllegalArgumentException("ID invalido.");
         Parada parada = paradaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No se encontro la parada con el id " + id));
         return new ParadaDTO(parada.getId(), parada.getUbicacion());
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         ApiResponse<List<MonopatinDTO>> monopatinesDeParada = monopatinClient.getMonopatinesByParadaId(id);
 
         if (!monopatinesDeParada.data().isEmpty()) throw new IllegalArgumentException("No se puede eliminar la parada porque tiene monopatines.");

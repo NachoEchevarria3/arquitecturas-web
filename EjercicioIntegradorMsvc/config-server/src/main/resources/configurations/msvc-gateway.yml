@@ -9,6 +9,8 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 spring:
+  main:
+    web-application-type: servlet
   application:
     name: msvc-gateway
   datasource:
@@ -29,28 +31,29 @@ spring:
       discovery:
         locator:
           enabled: true
-      routes:
-        - id: monopatines
-          uri: http://localhost:8090
-          predicates:
-            - Path=/api/monopatin/**
-        - id: mantenimientos
-          uri: http://localhost:8091
-          predicates:
-            - Path=/api/mantenimiento/**
-        - id: paradas
-          uri: http://localhost:8092
-          predicates:
-            - Path=/api/parada/**
-        - id: tarifas
-          uri: http://localhost:8093
-          predicates:
-            - Path=/api/tarifa/**
-        - id: viajes
-          uri: http://localhost:8094
-          predicates:
-            - Path=/api/viaje/**
-        - id: pagos
-          uri: http://localhost:8095
-          predicates:
-            - Path=/api/pago/**
+      mvc:
+        routes:
+          - id: monopatines
+            uri: http://localhost:8090
+            predicates:
+              - Path=/api/monopatin/**
+          - id: mantenimientos
+            uri: http://localhost:8091
+            predicates:
+              - Path=/api/mantenimiento/**
+          - id: paradas
+            uri: http://localhost:8092
+            predicates:
+              - Path=/api/parada/**
+          - id: tarifas
+            uri: http://localhost:8093
+            predicates:
+              - Path=/api/tarifa/**
+          - id: viajes
+            uri: http://localhost:8094
+            predicates:
+              - Path=/api/viaje/**
+          - id: pagos
+            uri: http://localhost:8095
+            predicates:
+              - Path=/api/pago/**

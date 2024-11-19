@@ -1,7 +1,7 @@
 package com.app.micromonopatin.dto;
 
 public record ParadaDTO(
-        Long id,
+        String id,
         String ubicacion
 ) {
 }

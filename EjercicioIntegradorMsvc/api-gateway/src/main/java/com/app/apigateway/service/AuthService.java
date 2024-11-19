@@ -1,17 +1,17 @@
 package com.app.apigateway.service;
 
-import com.app.apigateway.constant.RolEnum;
+import com.app.apigateway.constant.Rol;
 import com.app.apigateway.dto.InicioSesionDTO;
 import com.app.apigateway.dto.RegistroUsuarioDto;
 import com.app.apigateway.dto.UsuarioDTO;
 import com.app.apigateway.entity.MercadoPago;
-import com.app.apigateway.entity.Rol;
 import com.app.apigateway.entity.Usuario;
 import com.app.apigateway.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -32,6 +32,9 @@ public class AuthService {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public UsuarioDTO registrarse(RegistroUsuarioDto info) {
         if (info == null) throw new IllegalArgumentException("info no puede ser nulo.");
 
@@ -46,17 +49,19 @@ public class AuthService {
         // Obtenemos cuenta a asociar
         MercadoPago mercadoPago = mercadoPagoService.iniciarSesion(new MercadoPago(info.emailMp(), info.passwordMp()));
 
+        String encryptedPassword = passwordEncoder.encode(info.password());
+
         Usuario nuevoUsuario = new Usuario(
-                info.username(),
                 info.email(),
-                info.password(),
+                info.username(),
+                encryptedPassword,
                 info.nombre(),
                 info.apellido(),
                 info.telefono()
         );
 
         // Para probar con otro tipo de usuario (ADMINISTRADOR, ENCARGADO_MANTENIMIENTO) setearlo desde la BD.
-        nuevoUsuario.getRoles().add(new Rol(RolEnum.USUARIO.toString()));
+        nuevoUsuario.getRoles().add(Rol.USUARIO);
 
         // Conectamos cuenta de usuario con la cuenta de mercado pago
         nuevoUsuario.getCuentasMercadoPago().add(mercadoPago);
@@ -64,8 +69,8 @@ public class AuthService {
         usuarioRepository.save(nuevoUsuario);
         return new UsuarioDTO(
                 nuevoUsuario.getId(),
-                nuevoUsuario.getUsername(),
                 nuevoUsuario.getEmail(),
+                nuevoUsuario.getUsername(),
                 nuevoUsuario.getNombre(),
                 nuevoUsuario.getApellido(),
                 nuevoUsuario.getTelefono(),
