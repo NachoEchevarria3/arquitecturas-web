@@ -9,11 +9,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/usuario")
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<UsuarioDTO>>> getUsuarios() {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Usuarios obtenidos con éxito.",
+                usuarioService.findAll()
+        ));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UsuarioDTO>> getUsuario(@PathVariable Long id) {
@@ -21,15 +32,6 @@ public class UsuarioController {
                 HttpStatus.OK.value(),
                 "Usuario obtenido con éxito.",
                 usuarioService.findById(id)
-        ));
-    }
-
-    @PostMapping("/registrarse")
-    public ResponseEntity<ApiResponse<UsuarioDTO>> registrarse(@RequestBody RegistroUsuarioDto usuario) {
-        return ResponseEntity.status(HttpStatus.CREATED.value()).body(new ApiResponse<>(
-                HttpStatus.CREATED.value(),
-                "Cuenta creada con éxito.",
-                usuarioService.registrar(usuario)
         ));
     }
 

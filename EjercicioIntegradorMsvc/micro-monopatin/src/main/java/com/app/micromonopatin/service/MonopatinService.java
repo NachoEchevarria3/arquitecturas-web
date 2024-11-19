@@ -91,6 +91,31 @@ public class MonopatinService {
         )).toList();
     }
 
+    public List<MonopatinDTO> findMonopatinesByUbicacion(String ubicacion) {
+        ApiResponse<List<ParadaDTO>> paradas = paradaClient.getParadasByUbicacion(ubicacion);
+
+        List<Long> idsParadas = paradas.data().stream().map(ParadaDTO::id).toList();
+        List<Monopatin> monopatines = monopatinRepository.findByParadaIds(idsParadas);
+
+        if (monopatines.isEmpty()) {
+            throw new EntityNotFoundException("No se encontraron monopatines para la ubicación " + ubicacion + ".");
+        }
+
+        return monopatines.stream()
+                .map(m -> new MonopatinDTO(
+                        m.getId(),
+                        m.getEstado(),
+                        m.getKilometros(),
+                        m.getHistorialKilometros(),
+                        m.getLimiteKilometros(),
+                        m.getTiempoDeUso(),
+                        m.getHistorialTiempoDeUso(),
+                        m.getLimiteTiempoDeUso(),
+                        m.getIdParada()
+                ))
+                .toList();
+    }
+
     public void deleteById(Long id) {
         findById(id);
         monopatinRepository.deleteById(id);
@@ -137,6 +162,7 @@ public class MonopatinService {
         Monopatin monopatin = monopatinRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No existe un monopatin con ese id."));
         monopatin.setKilometros(monopatin.getKilometros() + kilometros);
+        monopatin.setHistorialKilometros(monopatin.getHistorialKilometros() + kilometros);
         monopatinRepository.save(monopatin);
     }
 
@@ -146,6 +172,7 @@ public class MonopatinService {
         Monopatin monopatin = monopatinRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No existe un monopatin con ese id."));
         monopatin.setTiempoDeUso(monopatin.getTiempoDeUso() + tiempoDeUso);
+        monopatin.setHistorialTiempoDeUso(monopatin.getHistorialTiempoDeUso() + tiempoDeUso);
         monopatinRepository.save(monopatin);
     }
 

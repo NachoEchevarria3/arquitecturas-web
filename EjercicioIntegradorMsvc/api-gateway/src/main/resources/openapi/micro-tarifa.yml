@@ -1,0 +1,183 @@
+openapi: 3.0.1
+info:
+  title: API de Monopatines
+  description: Documentación de la API de Monopatines.
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+    description: Servidor local
+
+paths:
+  /api/tarifa:
+    get:
+      summary: Obtiene el historial de tarifas
+      responses:
+        "200":
+          description: Lista de tarifas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiResponseList'
+        "404":
+          description: No se encontraron tarifas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+        "500":
+          description: Error en el servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+
+    post:
+      summary: Crea una nueva tarifa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TarifaRequest'
+      responses:
+        "201":
+          description: Tarifa creada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+        "400":
+          description: Petición inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+        "500":
+          description: Error en el servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+
+    put:
+      summary: Actualiza la tarifa actual
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TarifaRequest'
+      responses:
+        "200":
+          description: Tarifa actualizada con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+        "400":
+          description: Petición inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+        "404":
+          description: No hay una tarifa configurada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+
+  /api/tarifa/actual:
+    get:
+      summary: Obtiene la tarifa actual
+      responses:
+        "200":
+          description: Tarifa obtenida con éxito
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+        "404":
+          description: No hay una tarifa configurada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseObject'
+
+components:
+  schemas:
+    ApiResponseObject:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: Código de estado HTTP.
+        message:
+          type: string
+          description: Mensaje de la respuesta.
+        data:
+          oneOf:
+            - $ref: '#/components/schemas/TarifaResponse'
+            - type: "null"
+
+    ApiResponseList:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: Código de estado HTTP.
+        message:
+          type: string
+          description: Mensaje de la respuesta.
+        data:
+          oneOf:
+            - type: array
+              items:
+                $ref: '#/components/schemas/TarifaResponse'
+            - type: "null"
+
+    TarifaRequest:
+      type: object
+      properties:
+        tarifaInicial:
+          type: number
+          format: double
+          description: Monto de dinero con el que comienza el viaje.
+        tarifaPorMinuto:
+          type: number
+          format: double
+          description: Monto de dinero que se acumula por minuto en el viaje.
+        tarifaPausaExtensa:
+          type: number
+          format: double
+          description: Monto de dinero que se acumula por minuto en caso de que se supere el límite de pausa en el viaje.
+        validaDesde:
+          type: string
+          format: date
+          description: Fecha desde la cual tendra validez la tarifa.
+
+    TarifaResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identificador único de la tarifa.
+        tarifaInicial:
+          type: number
+          format: double
+          description: Monto de dinero con el que comienza el viaje.
+        tarifaPorMinuto:
+          type: number
+          format: double
+          description: Monto de dinero que se acumula por minuto en el viaje.
+        tarifaPausaExtensa:
+          type: number
+          format: double
+          description: Monto de dinero que se acumula por minuto en caso de que se supere el límite de pausa en el viaje.
+        validaDesde:
+          type: string
+          format: date
+          description: Fecha desde la cual tendra validez la tarifa.

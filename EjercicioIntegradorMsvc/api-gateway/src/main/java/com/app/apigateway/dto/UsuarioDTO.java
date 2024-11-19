@@ -5,9 +5,10 @@ import java.util.Set;
 
 public record UsuarioDTO(
         Long id,
+        String username,
+        String email,
         String nombre,
         String apellido,
-        String email,
         String telefono,
         LocalDate fechaAlta,
         Boolean activo,

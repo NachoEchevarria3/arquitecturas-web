@@ -4,16 +4,9 @@ server:
 spring:
   application:
     name: msvc-parada
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/paradas_db
-    username: root
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+  data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017/paradas_db
   jackson:
     deserialization:
       fail-on-unknown-properties: true

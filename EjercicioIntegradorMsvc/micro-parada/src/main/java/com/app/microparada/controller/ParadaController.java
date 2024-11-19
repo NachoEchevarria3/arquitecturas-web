@@ -27,6 +27,15 @@ public class ParadaController {
         ));
     }
 
+    @GetMapping("/ubicacion/{ubicacion}")
+    public ResponseEntity<ApiResponse<List<ParadaDTO>>> getParadasByUbicacion(@PathVariable String ubicacion) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Paradas obtenidas con éxito.",
+                paradaService.findAllByUbicacion(ubicacion)
+        ));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ParadaDTO>> getParadaById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(

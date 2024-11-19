@@ -16,16 +16,6 @@ public class TarifaService {
     @Autowired
     private TarifaRepository tarifaRepository;
 
-    public void create(CreateTarifaDTO tarifa) {
-        if (tarifa == null) throw new IllegalArgumentException("Tarifa no puede ser nulo.");
-        tarifaRepository.save(new Tarifa(
-                tarifa.tarifaInicial(),
-                tarifa.tarifaPorMinuto(),
-                tarifa.tarifaPausaEstensa(),
-                tarifa.validaDesde()
-        ));
-    }
-
     public TarifaDTO getTarifaActual() {
         Tarifa tarifa = tarifaRepository.findTarifaActual(LocalDate.now()).stream().findFirst()
                 .orElseThrow(() -> new EntityNotFoundException("No hay tarifa configurada."));

@@ -35,6 +35,21 @@ public class ParadaService {
         return paradas.stream().map(p -> new ParadaDTO(p.getId(), p.getUbicacion())).toList();
     }
 
+    public List<ParadaDTO> findAllByUbicacion(String ubicacion) {
+        List<Parada> paradas = paradaRepository.findByUbicacion(ubicacion);
+
+        if (paradas.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron paradas para la ubicación " + ubicacion + ".");
+        }
+
+        return paradas.stream()
+                .map(p -> new ParadaDTO(
+                        p.getId(),
+                        p.getUbicacion()
+                ))
+                .toList();
+    }
+
     public ParadaDTO findById(Long id) {
         if (id == null || id <= 0) throw new IllegalArgumentException("ID invalido.");
         Parada parada = paradaRepository.findById(id)

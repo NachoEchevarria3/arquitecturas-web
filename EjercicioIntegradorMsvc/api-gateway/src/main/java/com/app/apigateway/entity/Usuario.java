@@ -2,17 +2,20 @@ package com.app.apigateway.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.transaction.UserTransaction;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -20,29 +23,27 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString(exclude = {"cuentasMercadoPago"})
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "nombre no puede estar vacio.")
-    @Column(nullable = false)
-    private String nombre;
-
-    @NotBlank(message = "apellido no puede estar vacio.")
-    @Column(nullable = false)
-    private String apellido;
-
-    @NotBlank(message = "email no puede estar vacio.")
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String username;
+
     @JsonIgnore
-    @NotBlank(message = "password no puede estar vacio.")
     @Column(nullable = false)
     private String password;
 
-    @Pattern(regexp = "^[+]?\\d{10,15}$", message = "Número de celular inválido")
+    @Column(nullable = false)
+    private String nombre;
+
+    @Column(nullable = false)
+    private String apellido;
+
     @Column(nullable = false)
     private String telefono;
 
@@ -61,11 +62,20 @@ public class Usuario {
     )
     List<MercadoPago> cuentasMercadoPago;
 
-    public Usuario(String nombre, String apellido, String email, String password, String telefono) {
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_rol",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id")
+    )
+    private Set<Rol> roles;
+
+    public Usuario(String email, String username, String password, String nombre, String apellido, String telefono) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.email = email;
-        this.password = password;
         this.telefono = telefono;
         this.fechaAlta = LocalDate.now();
         this.activo = true;
@@ -83,5 +93,32 @@ public class Usuario {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.getNombre()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.activo;
     }
 }

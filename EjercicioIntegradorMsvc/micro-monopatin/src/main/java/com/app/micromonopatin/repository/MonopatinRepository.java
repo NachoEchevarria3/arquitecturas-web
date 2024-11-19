@@ -24,4 +24,7 @@ public interface MonopatinRepository extends JpaRepository<Monopatin, Long> {
     @Query("SELECT m FROM Monopatin m WHERE m.id IN :ids")
     List<Monopatin> findByIds(@Param("ids") List<Long> ids);
     List<Monopatin> findByEstado(EstadoMonopatin estado);
+
+    @Query("SELECT m FROM Monopatin m WHERE m.idParada IN :paradaIds")
+    List<Monopatin> findByParadaIds(@Param("paradaIds") List<Long> paradaIds);
 }

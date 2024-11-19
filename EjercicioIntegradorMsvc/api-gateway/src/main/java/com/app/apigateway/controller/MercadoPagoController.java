@@ -33,7 +33,10 @@ public class MercadoPagoController {
     }
 
     @PutMapping("/{id}/descontar-saldo/{monto}")
-    public ResponseEntity<ApiResponse<Double>> descontarSaldo(@PathVariable Long id, @PathVariable Double monto) {
+    public ResponseEntity<ApiResponse<Double>> descontarSaldo(
+            @PathVariable Long id,
+            @PathVariable Double monto
+    ) {
         mercadoPagoService.descontarSaldo(id, monto);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),

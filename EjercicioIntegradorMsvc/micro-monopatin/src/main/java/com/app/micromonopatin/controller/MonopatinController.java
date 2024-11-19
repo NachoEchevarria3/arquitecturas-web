@@ -76,6 +76,15 @@ public class MonopatinController {
         ));
     }
 
+    @GetMapping("/ubicacion/{ubicacion}")
+    public ResponseEntity<ApiResponse<List<MonopatinDTO>>> getMonopatinesByUbicacion(@PathVariable String ubicacion) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Monopatines obtenidos con éxito.",
+                monopatinService.findMonopatinesByUbicacion(ubicacion)
+        ));
+    }
+
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createMonopatin(@RequestBody @Valid CreateMonopatinDTO monopatin) {
         monopatinService.create(monopatin);

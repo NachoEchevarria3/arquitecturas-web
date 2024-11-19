@@ -3,3 +3,8 @@ spring:
     name: msvc-gateway
   config:
     import: optional:configserver:http://localhost:8888
+
+security:
+  jwt:
+    expiration-minutes: 30
+    secret-key: ZsW+lFOHP026ni5xiz7NkjzUJc9zmJDvbzJ0rAyOBs0=
