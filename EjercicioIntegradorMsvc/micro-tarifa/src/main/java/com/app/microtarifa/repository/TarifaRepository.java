@@ -15,7 +15,7 @@ public interface TarifaRepository extends JpaRepository<Tarifa, Long> {
             "SELECT t " +
                     "FROM Tarifa t " +
                     "WHERE t.validaDesde <= :fecha " +
-                    "ORDER BY t.validaDesde DESC "
+                    "ORDER BY t.validaDesde DESC, t.id DESC "
     )
     List<Tarifa> findTarifaActual(@Param("fecha") LocalDate fecha);
 

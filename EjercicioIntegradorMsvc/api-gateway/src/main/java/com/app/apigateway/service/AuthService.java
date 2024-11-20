@@ -1,9 +1,7 @@
 package com.app.apigateway.service;
 
 import com.app.apigateway.constant.Rol;
-import com.app.apigateway.dto.InicioSesionDTO;
-import com.app.apigateway.dto.RegistroUsuarioDto;
-import com.app.apigateway.dto.UsuarioDTO;
+import com.app.apigateway.dto.*;
 import com.app.apigateway.entity.MercadoPago;
 import com.app.apigateway.entity.Usuario;
 import com.app.apigateway.repository.UsuarioRepository;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class AuthService {
@@ -35,7 +32,7 @@ public class AuthService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public UsuarioDTO registrarse(RegistroUsuarioDto info) {
+    public UsuarioDTO registrarse(RegistroUsuarioDTO info) {
         if (info == null) throw new IllegalArgumentException("info no puede ser nulo.");
 
         if (usuarioRepository.findByEmail(info.email()).isPresent()) {
@@ -76,11 +73,12 @@ public class AuthService {
                 nuevoUsuario.getTelefono(),
                 nuevoUsuario.getFechaAlta(),
                 nuevoUsuario.getActivo(),
-                nuevoUsuario.getCuentasMercadoPago().stream().map(MercadoPago::getId).collect(Collectors.toSet())
+                nuevoUsuario.getCuentasMercadoPago().stream()
+                        .map(mp -> new MercadoPagoDTO(mp.getId(), mp.getUsername())).toList()
         );
     }
 
-    public String iniciarSesion(InicioSesionDTO inicioSesionDto) {
+    public JwtDTO iniciarSesion(InicioSesionDTO inicioSesionDto) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                 inicioSesionDto.email(), inicioSesionDto.password()
         );
@@ -90,7 +88,9 @@ public class AuthService {
         Usuario usuario = usuarioRepository.findByEmail(inicioSesionDto.email())
                 .orElseThrow(() -> new UsernameNotFoundException("No existe un usuario con ese email."));
 
-        return jwtService.generateToken(usuario, generateClaims(usuario));
+        return new JwtDTO(
+                jwtService.generateToken(usuario, generateClaims(usuario))
+        );
     }
 
     private Map<String, Object> generateClaims(Usuario usuario) {

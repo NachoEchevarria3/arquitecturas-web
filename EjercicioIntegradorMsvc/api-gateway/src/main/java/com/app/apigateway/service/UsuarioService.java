@@ -1,15 +1,16 @@
 package com.app.apigateway.service;
 
+import com.app.apigateway.dto.MercadoPagoDTO;
 import com.app.apigateway.dto.UsuarioDTO;
 import com.app.apigateway.entity.MercadoPago;
 import com.app.apigateway.entity.Usuario;
+import com.app.apigateway.exception.UnauthorizedException;
 import com.app.apigateway.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -18,6 +19,9 @@ public class UsuarioService {
 
     @Autowired
     private MercadoPagoService mercadoPagoService;
+
+    @Autowired
+    private JwtService jwtService;
 
     public List<UsuarioDTO> findAll() {
         List<Usuario> usuarios = usuarioRepository.findAll();
@@ -36,7 +40,8 @@ public class UsuarioService {
                         u.getTelefono(),
                         u.getFechaAlta(),
                         u.getActivo(),
-                        u.getCuentasMercadoPago().stream().map(MercadoPago::getId).collect(Collectors.toSet())
+                        u.getCuentasMercadoPago().stream()
+                                .map(mp -> new MercadoPagoDTO(mp.getId(), mp.getUsername())).toList()
                 ))
                 .toList();
     }
@@ -55,26 +60,9 @@ public class UsuarioService {
                 usuario.getTelefono(),
                 usuario.getFechaAlta(),
                 usuario.getActivo(),
-                usuario.getCuentasMercadoPago().stream().map(MercadoPago::getId).collect(Collectors.toSet())
+                usuario.getCuentasMercadoPago().stream()
+                        .map(mp -> new MercadoPagoDTO(mp.getId(), mp.getUsername())).toList()
         );
-    }
-
-    public void asociarMercadoPago(Long usuarioId, MercadoPago cuentaMercadoPago) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new EntityNotFoundException("No existe un usuario con ese id."));
-        MercadoPago mercadoPago = mercadoPagoService.iniciarSesion(cuentaMercadoPago);
-
-        usuario.getCuentasMercadoPago().add(mercadoPago);
-        usuarioRepository.save(usuario);
-    }
-
-    public void desacociarMercadoPago(Long usuarioId, Long mercadoPagoId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new EntityNotFoundException("No existe un usuario con ese id."));
-        MercadoPago mercadoPago = mercadoPagoService.findById(mercadoPagoId);
-
-        usuario.getCuentasMercadoPago().remove(mercadoPago);
-        usuarioRepository.save(usuario);
     }
 
     public UsuarioDTO anularCuenta(Long usuarioId) {
@@ -94,7 +82,39 @@ public class UsuarioService {
                 usuario.getTelefono(),
                 usuario.getFechaAlta(),
                 usuario.getActivo(),
-                usuario.getCuentasMercadoPago().stream().map(MercadoPago::getId).collect(Collectors.toSet())
+                usuario.getCuentasMercadoPago().stream()
+                        .map(mp -> new MercadoPagoDTO(mp.getId(), mp.getUsername())).toList()
         );
+    }
+
+    public void asociarCuentaMercadoPago(Long usuarioId, Long mercadoPagoId, String jwt) {
+        if (!jwtService.extractUserId(jwt).equals(usuarioId)) throw new UnauthorizedException("No tienes autorización para acceder a este recurso.");
+        if (usuarioId == null || usuarioId <= 0) throw new IllegalArgumentException("ID de usuario invalido.");
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new EntityNotFoundException("No existe un usuario con ese id."));
+        MercadoPago mercadoPago = mercadoPagoService.findById(mercadoPagoId);
+
+        List<MercadoPago> cuentasMercadoPago = usuario.getCuentasMercadoPago();
+
+        if (cuentasMercadoPago.contains(mercadoPago)) throw new IllegalArgumentException("El usuario ya tiene asociada esa cuenta de mercado pago.");
+
+        cuentasMercadoPago.add(mercadoPago);
+
+        usuarioRepository.save(usuario);
+    }
+
+    public List<MercadoPagoDTO> getCuentasMercadoPago(Long usuarioId, String jwt) {
+        if (!jwtService.extractUserId(jwt).equals(usuarioId)) throw new UnauthorizedException("No tienes autorización para acceder a este recurso.");
+        if (usuarioId == null || usuarioId <= 0) throw new IllegalArgumentException("ID de usuario invalido.");
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new EntityNotFoundException("No existe un usuario con ese id."));
+
+        List<MercadoPago> cuentasMercadoPago = usuario.getCuentasMercadoPago();
+
+        return cuentasMercadoPago.stream()
+                .map(mp -> new MercadoPagoDTO(mp.getId(), mp.getUsername()))
+                .toList();
     }
 }

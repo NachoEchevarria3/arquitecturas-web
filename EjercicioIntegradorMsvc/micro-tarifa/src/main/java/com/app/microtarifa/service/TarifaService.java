@@ -1,5 +1,6 @@
 package com.app.microtarifa.service;
 
+import com.app.microtarifa.dto.ActualizarTarifaDTO;
 import com.app.microtarifa.dto.CreateTarifaDTO;
 import com.app.microtarifa.dto.TarifaDTO;
 import com.app.microtarifa.entity.Tarifa;
@@ -29,33 +30,24 @@ public class TarifaService {
         );
     }
 
-    public TarifaDTO actualizarTarifa(CreateTarifaDTO tarifa) {
+    public TarifaDTO actualizarTarifa(ActualizarTarifaDTO tarifa) {
         if (tarifa.validaDesde().isBefore(LocalDate.now())) throw new IllegalArgumentException("La fecha de vigencia de la tarifa debe ser mayor a la fecha actual.");
 
-        Tarifa tarifaVigente = tarifaRepository.findTarifaActual(LocalDate.now()).stream().findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("No hay tarifa configurada."));
 
-        tarifaVigente.setTarifaInicial(tarifa.tarifaInicial());
-        tarifaVigente.setTarifaPorMinuto(tarifa.tarifaPorMinuto());
-        tarifaVigente.setTarifaPausaExtensa(tarifa.tarifaPausaEstensa());
-        tarifaVigente.setValidaDesde(tarifa.validaDesde());
+        Tarifa tarifaActualizada = tarifaRepository.save(new Tarifa(tarifa.tarifaInicial(), tarifa.tarifaPorMinuto(), tarifa.tarifaPausaEstensa(), tarifa.validaDesde()));
 
-        tarifaRepository.save(tarifaVigente);
         return new TarifaDTO(
-                tarifaVigente.getId(),
-                tarifaVigente.getTarifaInicial(),
-                tarifaVigente.getTarifaPorMinuto(),
-                tarifaVigente.getTarifaPausaExtensa(),
-                tarifaVigente.getValidaDesde()
+                tarifaActualizada.getId(),
+                tarifaActualizada.getTarifaInicial(),
+                tarifaActualizada.getTarifaPorMinuto(),
+                tarifaActualizada.getTarifaPausaExtensa(),
+                tarifaActualizada.getValidaDesde()
         );
     }
 
     public TarifaDTO crearTarifa(CreateTarifaDTO tarifa) {
-        if (tarifa.validaDesde().isBefore(LocalDate.now())) throw new IllegalArgumentException("La fecha de vigencia de la tarifa debe ser mayor a la fecha actual.");
-
         if (tarifaRepository.count() == 0) {
-            Tarifa nuevaTarifa = new Tarifa(tarifa.tarifaInicial(), tarifa.tarifaPorMinuto(), tarifa.tarifaPausaEstensa(), tarifa.validaDesde());
-            tarifaRepository.save(nuevaTarifa);
+            Tarifa nuevaTarifa = tarifaRepository.save(new Tarifa(tarifa.tarifaInicial(), tarifa.tarifaPorMinuto(), tarifa.tarifaPausaEstensa(), LocalDate.now()));
             return new TarifaDTO(
                     nuevaTarifa.getId(),
                     nuevaTarifa.getTarifaInicial(),
@@ -64,7 +56,14 @@ public class TarifaService {
                     nuevaTarifa.getValidaDesde()
             );
         } else {
-            return actualizarTarifa(tarifa);
+            return actualizarTarifa(
+                    new ActualizarTarifaDTO(
+                            tarifa.tarifaInicial(),
+                            tarifa.tarifaPorMinuto(),
+                            tarifa.tarifaPausaEstensa(),
+                            LocalDate.now()
+                    )
+            );
         }
     }
 

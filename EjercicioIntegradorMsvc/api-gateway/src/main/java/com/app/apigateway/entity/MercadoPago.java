@@ -21,16 +21,16 @@ public class MercadoPago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "email no puede estar vacio.")
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String username;
+
     @JsonIgnore
-    @NotBlank(message = "password no puede estar vacio.")
     @Column(nullable = false)
     private String password;
 
-    @NotNull(message = "saldo no puede ser nulo.")
     @Column(nullable = false)
     private Double saldo;
 
