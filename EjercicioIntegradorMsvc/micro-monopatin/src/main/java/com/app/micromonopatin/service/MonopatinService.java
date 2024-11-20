@@ -29,7 +29,7 @@ public class MonopatinService {
     private ViajeClient viajeClient;
 
     public void create(CreateMonopatinDTO monopatin) {
-        if (monopatin == null) throw new IllegalArgumentException("monopatin no puede ser nulo.");
+        if (monopatin == null) throw new IllegalArgumentException("Monopatin no puede ser nulo.");
 
         ApiResponse<ParadaDTO> parada = paradaClient.getParadaById(monopatin.idParada());
 
