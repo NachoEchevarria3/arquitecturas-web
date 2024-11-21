@@ -5,6 +5,7 @@ import com.app.micropago.dto.PagarViajeDTO;
 import com.app.micropago.service.PagoService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +25,11 @@ public class PagoController {
     @GetMapping("/total-facturado")
     @Operation(
             summary = "Obtiene total facturado en un año",
+            parameters = {
+                    @Parameter(name = "anio", description = "Año del que se quiere obtener el total facturado", required = true),
+                    @Parameter(name = "mesInicio", description = "Mes desde el que se quiere obtener el total facturado", required = true),
+                    @Parameter(name = "mesFin", description = "Mes hasta el que se quiere obtener el total facturado", required = true)
+            },
             responses = {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(
                             responseCode = "200",

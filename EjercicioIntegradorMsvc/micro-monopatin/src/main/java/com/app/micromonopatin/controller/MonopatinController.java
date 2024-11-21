@@ -116,8 +116,8 @@ public class MonopatinController {
                     )
             },
             parameters = {
-                    @Parameter(description = "Número mínimo de viajes", required = true),
-                    @Parameter(description = "Año a considerar", required = true)
+                    @Parameter(name = "minimoViajes", description = "Número mínimo de viajes", required = true),
+                    @Parameter(name = "anio", description = "Año a considerar", required = true)
             }
     )
     public ResponseEntity<ApiResponse<List<MonopatinDTO>>> getMonopatinesConMinimoDeViajes(

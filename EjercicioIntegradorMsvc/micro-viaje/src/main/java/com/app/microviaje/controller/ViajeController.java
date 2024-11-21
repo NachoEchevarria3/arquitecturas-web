@@ -69,7 +69,7 @@ public class ViajeController {
             }
     )
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> comenzarViaje(@Valid @RequestBody ComenzarViajeDTO viaje, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+    public ResponseEntity<ApiResponse<?>> comenzarViaje(@Valid @RequestBody ComenzarViajeDTO viaje, @Parameter(hidden = true) @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         viajeService.comenzarViaje(viaje, authorizationHeader.split(" ")[1]);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
                 HttpStatus.CREATED.value(),
@@ -95,7 +95,7 @@ public class ViajeController {
             }
     )
     @PostMapping("/{id}/pausar")
-    public ResponseEntity<ApiResponse<?>> pausarViaje(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+    public ResponseEntity<ApiResponse<?>> pausarViaje(@PathVariable Long id, @Parameter(hidden = true) @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         viajeService.pausarViaje(id, authorizationHeader.split(" ")[1]);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
                 HttpStatus.CREATED.value(),
@@ -134,7 +134,7 @@ public class ViajeController {
             }
     )
     @PutMapping("/{id}/reanudar")
-    public ResponseEntity<ApiResponse<?>> reanudarViaje(@PathVariable Long id, @Valid @RequestBody ReanudarViajeDTO infoReanudarViaje, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+    public ResponseEntity<ApiResponse<?>> reanudarViaje(@PathVariable Long id, @Valid @RequestBody ReanudarViajeDTO infoReanudarViaje, @Parameter(hidden = true) @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         viajeService.reanudarViaje(id, infoReanudarViaje, authorizationHeader.split(" ")[1]);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
@@ -172,7 +172,7 @@ public class ViajeController {
             }
     )
     @PutMapping("/{id}/finalizar")
-    public ResponseEntity<ApiResponse<?>> finalizarViaje(@PathVariable Long id, @Valid @RequestBody FinalizarViajeDTO viaje, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+    public ResponseEntity<ApiResponse<?>> finalizarViaje(@PathVariable Long id, @Valid @RequestBody FinalizarViajeDTO viaje, @Parameter(hidden = true) @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         viajeService.finalizarViaje(id, viaje, authorizationHeader.split(" ")[1]);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),

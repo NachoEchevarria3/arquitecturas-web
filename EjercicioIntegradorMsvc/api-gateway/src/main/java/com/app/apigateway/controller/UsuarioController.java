@@ -103,7 +103,7 @@ public class UsuarioController {
                     )
             }
     )
-    public ResponseEntity<ApiResponse<?>> asociarCuentaMercadoPago(@PathVariable Long idUsuario, @PathVariable Long idCuentaMp, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+    public ResponseEntity<ApiResponse<?>> asociarCuentaMercadoPago(@PathVariable Long idUsuario, @PathVariable Long idCuentaMp, @Parameter(hidden = true) @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         usuarioService.asociarCuentaMercadoPago(idUsuario, idCuentaMp, authorizationHeader.split(" ")[1]);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
@@ -145,7 +145,7 @@ public class UsuarioController {
                     )
             }
     )
-    public ResponseEntity<ApiResponse<List<MercadoPagoDTO>>> getCuentasMercadoPagoByUsuario(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+    public ResponseEntity<ApiResponse<List<MercadoPagoDTO>>> getCuentasMercadoPagoByUsuario(@PathVariable Long id, @Parameter(hidden = true) @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Cuentas de mercado pago asociadas obtenidas con éxito",
