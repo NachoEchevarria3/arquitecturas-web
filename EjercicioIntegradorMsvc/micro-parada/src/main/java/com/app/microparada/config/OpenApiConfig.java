@@ -9,14 +9,14 @@ import io.swagger.v3.oas.annotations.servers.Server;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "API Servicio Tarifas",
-                description = "Documentación para la API del servicio de tarifas",
+                title = "API Servicio Paradas",
+                description = "Documentación para la API del servicio de Paradas",
                 version = "1.0.0"
         ),
         servers = {
                 @Server(
                         description = "Servidor local",
-                        url = "http://localhost:8093"
+                        url = "http://localhost:8092"
                 )
         }
 )
