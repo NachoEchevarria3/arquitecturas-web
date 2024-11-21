@@ -3,6 +3,10 @@ package com.app.micropago.controller;
 import com.app.micropago.dto.ApiResponse;
 import com.app.micropago.dto.PagarViajeDTO;
 import com.app.micropago.service.PagoService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,11 +15,34 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/pago")
+@SecurityRequirement(name = "BearerAuth")
+@Tag(name = "Pagos")
 public class PagoController {
     @Autowired
     private PagoService pagoService;
 
     @GetMapping("/total-facturado")
+    @Operation(
+            summary = "Obtiene total facturado en un año",
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "200",
+                            description = "Total facturado obtneido con éxito."
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "400",
+                            description = "Petición inválida"
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "403",
+                            description = "No autorizado / Token inválido"
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "500",
+                            description = "Error del servidor"
+                    )
+            }
+    )
     public ResponseEntity<ApiResponse<Double>> getTotalFacturado(
             @RequestParam Integer anio,
             @RequestParam Integer mesInicio,
@@ -29,6 +56,7 @@ public class PagoController {
     }
 
     @PostMapping
+    @Hidden
     public ResponseEntity<ApiResponse<?>> pagar(@Valid @RequestBody PagarViajeDTO infoPago) {
         pagoService.pagar(infoPago);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
