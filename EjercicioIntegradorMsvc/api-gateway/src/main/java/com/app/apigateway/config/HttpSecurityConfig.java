@@ -32,46 +32,55 @@ public class HttpSecurityConfig {
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(req -> req
                         // Paradas
-                        .requestMatchers(HttpMethod.POST, "/api/parada/**").hasRole(Rol.ADMINISTRADOR.toString())
-                        .requestMatchers(HttpMethod.DELETE, "/api/parada/**").hasRole(Rol.ADMINISTRADOR.toString())
+                        .requestMatchers(HttpMethod.POST, "/api/parada/**").hasRole(Rol.ADMINISTRADOR.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/parada/**").hasRole(Rol.ADMINISTRADOR.name())
                         .requestMatchers(HttpMethod.GET, "/api/parada/**").authenticated()
 
                         // Tarifas
                         .requestMatchers(HttpMethod.GET, "api/tarifa/actual").authenticated()
-                        .requestMatchers("/api/tarifa/**").hasRole(Rol.ADMINISTRADOR.toString())
+                        .requestMatchers("/api/tarifa/**").hasRole(Rol.ADMINISTRADOR.name())
 
                         // Pagos
-                        .requestMatchers("/api/pago/total-facturado").hasRole(Rol.ADMINISTRADOR.toString())
-                        .requestMatchers(HttpMethod.POST, "/api/pago").hasRole(Rol.USUARIO.toString())
+                        .requestMatchers("/api/pago/total-facturado").hasRole(Rol.ADMINISTRADOR.name())
+                        .requestMatchers(HttpMethod.POST, "/api/pago").hasRole(Rol.USUARIO.name())
 
                         // Mantenimiento
-                        .requestMatchers("/api/mantenimiento/**").hasRole(Rol.ENCARGADO_MANTENIMIENTO.toString())
+                        .requestMatchers("/api/mantenimiento/**").hasRole(Rol.ENCARGADO_MANTENIMIENTO.name())
 
                         // Monopatines
-                        .requestMatchers("/api/monopatin/reporte").hasRole(Rol.ENCARGADO_MANTENIMIENTO.toString())
-                        .requestMatchers("/api/monopatin/minimo-viajes/**").hasRole(Rol.ADMINISTRADOR.toString())
-                        .requestMatchers("/api/monopatin/disponibles-vs-mantenimiento").hasRole(Rol.ADMINISTRADOR.toString())
-                        .requestMatchers(HttpMethod.POST, "/api/monopatin/**").hasRole(Rol.ADMINISTRADOR.toString())
-                        .requestMatchers(HttpMethod.DELETE, "/api/monopatin/**").hasRole(Rol.ADMINISTRADOR.toString())
-                        .requestMatchers("/api/monopatin/*/reset-estadisticas").hasRole(Rol.ENCARGADO_MANTENIMIENTO.toString())
+                        .requestMatchers("/api/monopatin/reporte").hasRole(Rol.ENCARGADO_MANTENIMIENTO.name())
+                        .requestMatchers("/api/monopatin/minimo-viajes/**").hasRole(Rol.ADMINISTRADOR.name())
+                        .requestMatchers("/api/monopatin/disponibles-vs-mantenimiento").hasRole(Rol.ADMINISTRADOR.name())
+                        .requestMatchers("/api/monopatin/*/reset-estadisticas").hasRole(Rol.ENCARGADO_MANTENIMIENTO.name())
                         .requestMatchers("api/monopatin/*/ubicar-en-parada/**").authenticated()
                         .requestMatchers("/api/monopatin/parada/**").authenticated()
                         .requestMatchers("/api/monopatin/ubicacion/**").authenticated()
+                        .requestMatchers("/api/monopatin/*/estado/*").authenticated()
+                        .requestMatchers("/api/monopatin/*/kilometros/*").authenticated()
+                        .requestMatchers("/api/monopatin/*/tiempo-de-uso/*").authenticated()
+                        .requestMatchers("/api/monopatin/*/tiempo-de-pausa/*").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/monopatin/**").hasRole(Rol.ADMINISTRADOR.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/monopatin/**").hasRole(Rol.ADMINISTRADOR.name())
                         .requestMatchers(HttpMethod.GET, "/api/monopatin/**").authenticated()
 
                         // Viajes
-                        .requestMatchers("/api/viaje/monopatines/minimo-viajes/**").hasRole(Rol.ADMINISTRADOR.toString())
-                        .requestMatchers("/api/viaje/**").hasRole(Rol.USUARIO.toString())
+                        .requestMatchers("/api/viaje/monopatines/minimo-viajes/**").hasRole(Rol.ADMINISTRADOR.name())
+                        .requestMatchers("/api/viaje/**").hasRole(Rol.USUARIO.name())
 
                         // Autenticación
                         .requestMatchers("/api/auth/**").permitAll()
 
                         // Cuentas
-                        .requestMatchers("/api/usuario/*/anular").hasRole(Rol.ADMINISTRADOR.toString())
-                        .requestMatchers("/api/usuario").hasRole(Rol.ADMINISTRADOR.toString())
+                        .requestMatchers("/api/usuario/*/anular").hasRole(Rol.ADMINISTRADOR.name())
+                        .requestMatchers("/api/usuario/*/asociar-mp/*").hasRole(Rol.USUARIO.name())
+                        .requestMatchers("/api/usuario/*/cuentas-mp").hasRole(Rol.USUARIO.name())
+                        .requestMatchers("/api/usuario").hasRole(Rol.ADMINISTRADOR.name())
+                        .requestMatchers("/api/usuario/*").authenticated()
 
                         // Mercado pago
-                        .requestMatchers("/api/mercado-pago/*/cargar-saldo/**").hasRole(Rol.USUARIO.toString())
+                        .requestMatchers("/api/mercado-pago/*/cargar-saldo/**").hasRole(Rol.USUARIO.name())
+                        .requestMatchers("/api/mercado-pago/*/saldo").hasRole(Rol.USUARIO.name())
+                        .requestMatchers("/api/mercado-pago/*/descontar-saldo/*").authenticated()
 
                         .anyRequest().authenticated()
                 )

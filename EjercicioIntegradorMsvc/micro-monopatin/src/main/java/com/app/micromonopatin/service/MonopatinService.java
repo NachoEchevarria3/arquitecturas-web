@@ -117,7 +117,8 @@ public class MonopatinService {
     }
 
     public void deleteById(Long id) {
-        findById(id);
+        MonopatinDTO monopatin = findById(id);
+        if (!monopatin.estado().equals(EstadoMonopatin.DISPONIBLE)) throw new IllegalArgumentException("No se puede eliminar un monopatin que no esta en una parada.");
         monopatinRepository.deleteById(id);
     }
 

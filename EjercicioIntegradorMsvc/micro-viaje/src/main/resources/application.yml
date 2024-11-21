@@ -3,3 +3,7 @@ spring:
     name: msvc-viaje
   config:
     import: optional:configserver:http://localhost:8888
+
+security:
+  jwt:
+    secret-key: ZsW+lFOHP026ni5xiz7NkjzUJc9zmJDvbzJ0rAyOBs0=

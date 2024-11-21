@@ -11,6 +11,9 @@ public class MercadoPagoService {
     @Autowired
     private MercadoPagoRepository mercadoPagoRepository;
 
+    @Autowired
+    private JwtService jwtService;
+
     public MercadoPago findById(Long id) {
         if (id == null || id <= 0) throw new IllegalArgumentException("ID invalido.");
         return mercadoPagoRepository.findById(id)

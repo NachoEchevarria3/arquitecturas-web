@@ -1,6 +1,7 @@
 package com.app.microviaje.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public record UsuarioDTO(
@@ -11,6 +12,6 @@ public record UsuarioDTO(
         String telefono,
         LocalDate fechaAlta,
         Boolean activo,
-        Set<Long> idsCuentasMp
+        List<MercadoPagoDTO> cuentasMp
 ) {
 }

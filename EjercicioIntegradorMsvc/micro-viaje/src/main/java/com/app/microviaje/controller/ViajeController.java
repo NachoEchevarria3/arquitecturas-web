@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,8 +69,8 @@ public class ViajeController {
             }
     )
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> comenzarViaje(@Valid @RequestBody ComenzarViajeDTO viaje) {
-        viajeService.comenzarViaje(viaje);
+    public ResponseEntity<ApiResponse<?>> comenzarViaje(@Valid @RequestBody ComenzarViajeDTO viaje, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        viajeService.comenzarViaje(viaje, authorizationHeader.split(" ")[1]);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
                 HttpStatus.CREATED.value(),
                 "Viaje comenzado con éxito.",
@@ -94,8 +95,8 @@ public class ViajeController {
             }
     )
     @PostMapping("/{id}/pausar")
-    public ResponseEntity<ApiResponse<?>> pausarViaje(@PathVariable Long id) {
-        viajeService.pausarViaje(id);
+    public ResponseEntity<ApiResponse<?>> pausarViaje(@PathVariable Long id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        viajeService.pausarViaje(id, authorizationHeader.split(" ")[1]);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
                 HttpStatus.CREATED.value(),
                 "Viaje pausado con éxito.",
@@ -132,9 +133,9 @@ public class ViajeController {
                     )
             }
     )
-    @PostMapping("/{id}/reanudar")
-    public ResponseEntity<ApiResponse<?>> reanudarViaje(@PathVariable Long id, @Valid @RequestBody ReanudarViajeDTO infoReanudarViaje) {
-        viajeService.reanudarViaje(id, infoReanudarViaje);
+    @PutMapping("/{id}/reanudar")
+    public ResponseEntity<ApiResponse<?>> reanudarViaje(@PathVariable Long id, @Valid @RequestBody ReanudarViajeDTO infoReanudarViaje, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        viajeService.reanudarViaje(id, infoReanudarViaje, authorizationHeader.split(" ")[1]);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 HttpStatus.OK.value(),
                 "Viaje reanudado con éxito.",
@@ -171,10 +172,10 @@ public class ViajeController {
             }
     )
     @PutMapping("/{id}/finalizar")
-    public ResponseEntity<ApiResponse<?>> finalizarViaje(@PathVariable Long id, @Valid @RequestBody FinalizarViajeDTO viaje) {
-        viajeService.finalizarViaje(id, viaje);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
-                HttpStatus.CREATED.value(),
+    public ResponseEntity<ApiResponse<?>> finalizarViaje(@PathVariable Long id, @Valid @RequestBody FinalizarViajeDTO viaje, @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        viajeService.finalizarViaje(id, viaje, authorizationHeader.split(" ")[1]);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
+                HttpStatus.OK.value(),
                 "Viaje finalizado con éxito.",
                 null
         ));

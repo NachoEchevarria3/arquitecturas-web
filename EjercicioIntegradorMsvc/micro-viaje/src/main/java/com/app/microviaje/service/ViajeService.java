@@ -5,11 +5,14 @@ import com.app.microviaje.constant.EstadoMonopatin;
 import com.app.microviaje.dto.*;
 import com.app.microviaje.entity.Pausa;
 import com.app.microviaje.entity.Viaje;
+import com.app.microviaje.exception.UnauthorizedException;
 import com.app.microviaje.projections.MonopatinProjection;
 import com.app.microviaje.repository.ViajeRepository;
+import com.app.microviaje.utils.JwtUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -36,10 +39,13 @@ public class ViajeService {
     @Autowired
     private MercadoPagoClient mercadoPagoClient;
 
-    public void comenzarViaje(ComenzarViajeDTO infoViaje) {
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    public void comenzarViaje(ComenzarViajeDTO infoViaje, String jwt) {
         if (infoViaje == null) throw new IllegalArgumentException("infoViaje no puede ser nulo.");
 
-        Viaje viaje = crearViaje(infoViaje);
+        Viaje viaje = crearViaje(infoViaje, jwt);
 
         if (viaje.getFechaFin() != null) throw new IllegalArgumentException("El viaje ya ha finalizado.");
 
@@ -47,7 +53,7 @@ public class ViajeService {
         monopatinClient.actualizarEstado(infoViaje.idMonopatin(), EstadoMonopatin.VIAJANDO);
     }
 
-    private Viaje crearViaje(ComenzarViajeDTO infoViaje) {
+    private Viaje crearViaje(ComenzarViajeDTO infoViaje, String jwt) {
         ApiResponse<MonopatinDTO> monopatinRes = monopatinClient.getMonopatinById(infoViaje.idMonopatin());
 
         if (!monopatinRes.data().estado().equals(EstadoMonopatin.DISPONIBLE)) {
@@ -56,9 +62,11 @@ public class ViajeService {
 
         ApiResponse<UsuarioDTO> usuarioRes = usuarioClient.getUsuario(infoViaje.idUsuario());
 
+        if (!jwtUtils.extractUserId(jwt).equals(usuarioRes.data().id())) throw new UnauthorizedException("No tienes autorización para acceder a este recurso.");
+
         if (!usuarioRes.data().activo()) throw new IllegalArgumentException("Tu cuenta esta suspendida.");
 
-        if (!usuarioRes.data().idsCuentasMp().contains(infoViaje.idCuentaMercadoPago())) throw new IllegalArgumentException("El usuario no tiene una cuenta asociada con el id " + infoViaje.idCuentaMercadoPago() + ".");
+        if (!usuarioRes.data().cuentasMp().stream().anyMatch(mp -> mp.id().equals(infoViaje.idCuentaMercadoPago()))) throw new IllegalArgumentException("El usuario no tiene una cuenta asociada con el id " + infoViaje.idCuentaMercadoPago() + ".");
 
         ApiResponse<Double> saldoCuentaRes = mercadoPagoClient.consultarSaldo(infoViaje.idCuentaMercadoPago());
 
@@ -76,11 +84,13 @@ public class ViajeService {
         );
     }
 
-    public void pausarViaje(Long idViaje) {
+    public void pausarViaje(Long idViaje, String jwt) {
         if (idViaje == null || idViaje <= 0) throw new IllegalArgumentException("ID invalido.");
 
         Viaje viaje = viajeRepository.findById(idViaje)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el viaje con id " + idViaje));
+
+        if (!jwtUtils.extractUserId(jwt).equals(viaje.getIdUsuario())) throw new UnauthorizedException("No tienes autorización para acceder a este recurso.");
 
         if (viaje.getFechaFin() != null) throw new IllegalArgumentException("El viaje ya ha finalizado.");
 
@@ -89,12 +99,14 @@ public class ViajeService {
         viajeRepository.save(viaje);
     }
 
-    public void reanudarViaje(Long idViaje, ReanudarViajeDTO reanudarViajeDto) {
+    public void reanudarViaje(Long idViaje, ReanudarViajeDTO reanudarViajeDto, String jwt) {
         if (idViaje == null || idViaje <= 0) throw new IllegalArgumentException("ID invalido.");
         if (reanudarViajeDto == null) throw new IllegalArgumentException("reanudarViajeDto no puede ser nulo.");
 
         Viaje viaje = viajeRepository.findById(idViaje)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el viaje con id " + idViaje));
+
+        if (!jwtUtils.extractUserId(jwt).equals(viaje.getIdUsuario())) throw new UnauthorizedException("No tienes autorización para acceder a este recurso.");
 
         if (viaje.getFechaFin() != null) throw new IllegalArgumentException("El viaje ya ha finalizado.");
 
@@ -106,12 +118,15 @@ public class ViajeService {
         viajeRepository.save(viaje);
     }
 
-    public void finalizarViaje(Long idViaje, FinalizarViajeDTO finalizarViajeDto) {
+    @Transactional
+    public void finalizarViaje(Long idViaje, FinalizarViajeDTO finalizarViajeDto, String jwt) {
         if (idViaje == null || idViaje <= 0) throw new IllegalArgumentException("ID invalido.");
         if (finalizarViajeDto == null) throw new IllegalArgumentException("finalizarViajeDto no puede ser nulo.");
 
         Viaje viaje = viajeRepository.findById(idViaje)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el viaje con id " + idViaje));
+
+        if (!jwtUtils.extractUserId(jwt).equals(viaje.getIdUsuario())) throw new UnauthorizedException("No tienes autorización para acceder a este recurso.");
 
         if (viaje.getFechaFin() != null) throw new IllegalArgumentException("El viaje ya ha finalizado.");
 

@@ -1,6 +1,5 @@
 package com.app.micropago.client;
 
-import com.app.micropago.config.FeignConfig;
 import com.app.micropago.dto.ApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
